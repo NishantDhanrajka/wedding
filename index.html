@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nishant & Sharmistha Wedding</title>
+    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Cormorant+Garamond:wght@300;400;500&family=Cinzel:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #2d1010;
+            font-family: 'Cormorant Garamond', serif;
+            overflow: hidden;
+        }
+
+        .invitation {
+            width: 100%;
+            max-width: 500px;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 60px 30px;
+            background: radial-gradient(ellipse at center, #5c2020 0%, #3d1414 40%, #2d1010 70%, #1f0a0a 100%);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .invitation::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 350px;
+            height: 350px;
+            border: 1px solid rgba(180, 160, 80, 0.08);
+            border-radius: 50%;
+            animation: pulseRing 4s ease-in-out infinite;
+            pointer-events: none;
+        }
+
+        .invitation::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 500px;
+            height: 500px;
+            border: 1px solid rgba(180, 160, 80, 0.05);
+            border-radius: 50%;
+            animation: pulseRing 4s ease-in-out infinite 1s;
+            pointer-events: none;
+        }
+
+        @keyframes pulseRing {
+            0%, 100% { opacity: 0.3; transform: translate(-50%, -50%) scale(1); }
+            50% { opacity: 0.6; transform: translate(-50%, -50%) scale(1.05); }
+        }
+
+        .ornament {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 280px;
+            height: 30px;
+            position: relative;
+            opacity: 0;
+            animation: fadeIn 1s ease forwards 0.3s;
+        }
+
+        .ornament svg {
+            width: 100%;
+            height: 100%;
+        }
+
+        .heading {
+            font-family: 'Cinzel', serif;
+            font-size: 13px;
+            font-weight: 400;
+            letter-spacing: 4px;
+            color: #c9b96e;
+            text-align: center;
+            margin-top: 30px;
+            line-height: 1.8;
+            opacity: 0;
+            animation: fadeSlideDown 1s ease forwards 0.6s;
+        }
+
+        .names {
+            text-align: center;
+            margin: 20px 0;
+            position: relative;
+            z-index: 1;
+        }
+
+        .name {
+            font-family: 'Great Vibes', cursive;
+            font-size: 72px;
+            color: #f0e8d0;
+            display: block;
+            opacity: 0;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .name:first-child {
+            animation: fadeSlideRight 1.2s ease forwards 1s;
+        }
+
+        .ampersand {
+            font-family: 'Great Vibes', cursive;
+            font-size: 36px;
+            color: #c9a030;
+            display: block;
+            margin: -5px 0;
+            opacity: 0;
+            animation: fadeScale 1s ease forwards 1.4s;
+        }
+
+        .name:last-child {
+            animation: fadeSlideLeft 1.2s ease forwards 1.6s;
+        }
+
+        .date {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 18px;
+            font-weight: 300;
+            color: #a89860;
+            letter-spacing: 2px;
+            margin-top: 15px;
+            opacity: 0;
+            animation: fadeIn 1s ease forwards 2s;
+        }
+
+        .ornament-bottom {
+            margin-top: 30px;
+            opacity: 0;
+            animation: fadeIn 1s ease forwards 2.2s;
+        }
+
+        .buttons {
+            margin-top: 50px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 18px;
+            width: 100%;
+            max-width: 320px;
+            opacity: 0;
+            animation: fadeSlideUp 1s ease forwards 2.5s;
+            position: relative;
+            z-index: 10;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 16px 40px;
+            font-family: 'Cinzel', serif;
+            font-size: 14px;
+            font-weight: 500;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            text-align: center;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #d4a734, #b8922a, #d4a734);
+            background-size: 200% 200%;
+            color: #1a1a0a;
+            border: none;
+            box-shadow: 0 4px 15px rgba(200, 160, 40, 0.3);
+            animation: shimmer 3s ease infinite;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px) scale(1.02);
+            box-shadow: 0 8px 25px rgba(200, 160, 40, 0.5);
+        }
+
+        .btn-primary:active {
+            transform: translateY(0) scale(0.98);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: #c9a030;
+            border: 1.5px solid #c9a030;
+        }
+
+        .btn-secondary:hover {
+            background: rgba(201, 160, 48, 0.1);
+            transform: translateY(-2px) scale(1.02);
+            box-shadow: 0 4px 15px rgba(200, 160, 40, 0.2);
+        }
+
+        .btn-secondary:active {
+            transform: translateY(0) scale(0.98);
+        }
+
+        .music-note {
+            font-size: 16px;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes fadeSlideDown {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeSlideUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeSlideRight {
+            from { opacity: 0; transform: translateX(-30px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        @keyframes fadeSlideLeft {
+            from { opacity: 0; transform: translateX(30px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        @keyframes fadeScale {
+            from { opacity: 0; transform: scale(0.5); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        @keyframes shimmer {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        @media (max-width: 480px) {
+            .name {
+                font-size: 56px;
+            }
+            .heading {
+                font-size: 11px;
+                letter-spacing: 3px;
+            }
+            .invitation {
+                padding: 40px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="invitation">
+        <div class="ornament">
+            <svg viewBox="0 0 300 30" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="150" cy="15" r="5" fill="#8a7a3a"/>
+                <circle cx="150" cy="15" r="3" fill="#5c2020"/>
+                <path d="M140 15 Q120 5 80 15" stroke="#8a7a3a" stroke-width="1" fill="none"/>
+                <path d="M160 15 Q180 5 220 15" stroke="#8a7a3a" stroke-width="1" fill="none"/>
+                <path d="M140 15 Q120 25 80 15" stroke="#8a7a3a" stroke-width="1" fill="none"/>
+                <path d="M160 15 Q180 25 220 15" stroke="#8a7a3a" stroke-width="1" fill="none"/>
+                <circle cx="80" cy="15" r="3" fill="#8a7a3a"/>
+                <circle cx="220" cy="15" r="3" fill="#8a7a3a"/>
+                <line x1="30" y1="15" x2="75" y2="15" stroke="#8a7a3a" stroke-width="0.5"/>
+                <line x1="225" y1="15" x2="270" y2="15" stroke="#8a7a3a" stroke-width="0.5"/>
+            </svg>
+        </div>
+
+        <p class="heading">YOU ARE INVITED TO THE WEDDING<br>OF</p>
+
+        <div class="names">
+            <span class="name">Ruhi</span>
+            <span class="ampersand">&</span>
+            <span class="name">Nishant</span>
+        </div>
+
+        <p class="date">Dec 1 &mdash; 2, 2026</p>
+
+        <div class="ornament-bottom">
+            <svg width="280" height="30" viewBox="0 0 300 30" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="150" cy="15" r="4" fill="#8a7a3a"/>
+                <path d="M140 15 Q125 8 100 15" stroke="#8a7a3a" stroke-width="1" fill="none"/>
+                <path d="M160 15 Q175 8 200 15" stroke="#8a7a3a" stroke-width="1" fill="none"/>
+                <path d="M140 15 Q125 22 100 15" stroke="#8a7a3a" stroke-width="1" fill="none"/>
+                <path d="M160 15 Q175 22 200 15" stroke="#8a7a3a" stroke-width="1" fill="none"/>
+                <circle cx="100" cy="15" r="2.5" fill="#8a7a3a"/>
+                <circle cx="200" cy="15" r="2.5" fill="#8a7a3a"/>
+                <path d="M90 15 Q75 10 60 15" stroke="#8a7a3a" stroke-width="0.8" fill="none"/>
+                <path d="M210 15 Q225 10 240 15" stroke="#8a7a3a" stroke-width="0.8" fill="none"/>
+                <path d="M90 15 Q75 20 60 15" stroke="#8a7a3a" stroke-width="0.8" fill="none"/>
+                <path d="M210 15 Q225 20 240 15" stroke="#8a7a3a" stroke-width="0.8" fill="none"/>
+            </svg>
+        </div>
+
+        <div class="buttons">
+            <button class="btn btn-primary" onclick="enterWithMusic()">
+                <span class="music-note">&#9835;</span>
+                OPEN WITH MUSIC
+            </button>
+            <button class="btn btn-secondary" onclick="enterQuietly()">
+                ENTER QUIETLY
+            </button>
+        </div>
+    </div>
+
+    <script>
+        function enterWithMusic() {
+            document.querySelector('.invitation').style.transition = 'opacity 1s ease, transform 1s ease';
+            document.querySelector('.invitation').style.opacity = '0';
+            document.querySelector('.invitation').style.transform = 'scale(1.1)';
+            setTimeout(() => {
+                window.location.href = 'wedding.html?music=1';
+            }, 1000);
+        }
+
+        function enterQuietly() {
+            document.querySelector('.invitation').style.transition = 'opacity 1s ease, transform 1s ease';
+            document.querySelector('.invitation').style.opacity = '0';
+            document.querySelector('.invitation').style.transform = 'scale(0.95)';
+            setTimeout(() => {
+                window.location.href = 'wedding.html';
+            }, 1000);
+        }
+    </script>
+</body>
+</html>
