@@ -3,8 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#2d1010">
     <title>Ruhi & Nishant — Wedding Invitation</title>
-    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Cinzel:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="preload" href="images/bride-door.jpg" as="image">
+    <link rel="preload" href="images/groom-door.jpg" as="image">
+    <link rel="preload" href="images/bride-groom.png" as="image">
+    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Cinzel:wght@400;500;600;700&display=swap&font-display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -14,7 +18,6 @@
 
         html {
             scroll-behavior: smooth;
-            scroll-snap-type: y proximity;
         }
 
         body {
@@ -22,44 +25,426 @@
             overflow-x: hidden;
             width: 100%;
             max-width: 100vw;
+            -webkit-overflow-scrolling: touch;
         }
 
-        /* Loading splash */
-        .splash {
+        /* Cover overlay */
+        .cover-overlay {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: #f8f4eb;
+            z-index: 9999;
             display: flex;
             align-items: center;
             justify-content: center;
-            z-index: 9999;
+            background: #2d1010;
             transition: opacity 1s ease, visibility 1s ease;
         }
 
-        .splash.hidden {
+        .cover-overlay.hidden {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+        }
+
+        .cover-invitation {
+            width: 100%;
+            max-width: 500px;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 60px 30px;
+            background: radial-gradient(ellipse at center, #5c2020 0%, #3d1414 40%, #2d1010 70%, #1f0a0a 100%);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cover-invitation::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 350px;
+            height: 350px;
+            border: 1px solid rgba(180, 160, 80, 0.08);
+            border-radius: 50%;
+            animation: coverPulseRing 4s ease-in-out infinite;
+            pointer-events: none;
+        }
+
+        .cover-invitation::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 500px;
+            height: 500px;
+            border: 1px solid rgba(180, 160, 80, 0.05);
+            border-radius: 50%;
+            animation: coverPulseRing 4s ease-in-out infinite 1s;
+            pointer-events: none;
+        }
+
+        @keyframes coverPulseRing {
+            0%, 100% { opacity: 0.3; transform: translate(-50%, -50%) scale(1); }
+            50% { opacity: 0.6; transform: translate(-50%, -50%) scale(1.05); }
+        }
+
+        .cover-ornament {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 280px;
+            height: 30px;
+            opacity: 0;
+            animation: coverFadeIn 1s ease forwards 0.3s;
+        }
+
+        .cover-ornament svg { width: 100%; height: 100%; }
+
+        .cover-heading {
+            font-family: 'Cinzel', serif;
+            font-size: 13px;
+            font-weight: 400;
+            letter-spacing: 4px;
+            color: #c9b96e;
+            text-align: center;
+            margin-top: 30px;
+            line-height: 1.8;
+            opacity: 0;
+            animation: coverFadeSlideDown 1s ease forwards 0.6s;
+        }
+
+        .cover-names {
+            text-align: center;
+            margin: 20px 0;
+            position: relative;
+            z-index: 1;
+        }
+
+        .cover-name {
+            font-family: 'Great Vibes', cursive;
+            font-size: 72px;
+            color: #f0e8d0;
+            display: block;
+            opacity: 0;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .cover-name:first-child { animation: coverFadeSlideRight 1.2s ease forwards 1s; }
+        .cover-name:last-child { animation: coverFadeSlideLeft 1.2s ease forwards 1.6s; }
+
+        .cover-ampersand {
+            font-family: 'Great Vibes', cursive;
+            font-size: 36px;
+            color: #c9a030;
+            display: block;
+            margin: -5px 0;
+            opacity: 0;
+            animation: coverFadeScale 1s ease forwards 1.4s;
+        }
+
+        .cover-date {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 18px;
+            font-weight: 300;
+            color: #a89860;
+            letter-spacing: 2px;
+            margin-top: 15px;
+            opacity: 0;
+            animation: coverFadeIn 1s ease forwards 2s;
+        }
+
+        .cover-ornament-bottom {
+            margin-top: 30px;
+            opacity: 0;
+            animation: coverFadeIn 1s ease forwards 2.2s;
+        }
+
+        .cover-buttons {
+            margin-top: 50px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 18px;
+            width: 100%;
+            max-width: 320px;
+            opacity: 0;
+            animation: coverFadeSlideUp 1s ease forwards 2.5s;
+            position: relative;
+            z-index: 10;
+        }
+
+        .cover-btn {
+            width: 100%;
+            padding: 16px 40px;
+            font-family: 'Cinzel', serif;
+            font-size: 14px;
+            font-weight: 500;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .cover-btn-primary {
+            background: linear-gradient(135deg, #d4a734, #b8922a, #d4a734);
+            background-size: 200% 200%;
+            color: #1a1a0a;
+            border: none;
+            box-shadow: 0 4px 15px rgba(200, 160, 40, 0.3);
+            animation: shimmer 3s ease infinite;
+        }
+
+        .cover-btn-primary:hover {
+            transform: translateY(-2px) scale(1.02);
+            box-shadow: 0 8px 25px rgba(200, 160, 40, 0.5);
+        }
+
+        .cover-btn-secondary {
+            background: transparent;
+            color: #c9a030;
+            border: 1.5px solid #c9a030;
+        }
+
+        .cover-btn-secondary:hover {
+            background: rgba(201, 160, 48, 0.1);
+            transform: translateY(-2px) scale(1.02);
+            box-shadow: 0 4px 15px rgba(200, 160, 40, 0.2);
+        }
+
+        @keyframes coverFadeIn {
+            from { opacity: 0; } to { opacity: 1; }
+        }
+        @keyframes coverFadeSlideDown {
+            from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes coverFadeSlideUp {
+            from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes coverFadeSlideRight {
+            from { opacity: 0; transform: translateX(-30px); } to { opacity: 1; transform: translateX(0); }
+        }
+        @keyframes coverFadeSlideLeft {
+            from { opacity: 0; transform: translateX(30px); } to { opacity: 1; transform: translateX(0); }
+        }
+        @keyframes coverFadeScale {
+            from { opacity: 0; transform: scale(0.5); } to { opacity: 1; transform: scale(1); }
+        }
+
+        @media (max-width: 480px) {
+            .cover-name { font-size: 56px; }
+            .cover-heading { font-size: 11px; letter-spacing: 3px; }
+            .cover-invitation { padding: 40px 20px; }
+        }
+
+        /* Royal door opening animation */
+        /* Bride-Groom background behind doors */
+        .bride-groom-reveal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 996;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: radial-gradient(ellipse at center, #3d1414 0%, #2d1010 60%, #1a0808 100%);
+            pointer-events: none;
+            transition: opacity 1.5s ease, visibility 1.5s ease;
+        }
+
+        .bride-groom-reveal.fade-out {
             opacity: 0;
             visibility: hidden;
         }
 
-        .splash-content {
-            text-align: center;
+        .bride-groom-reveal img {
+            max-width: 75%;
+            max-height: 70vh;
+            object-fit: contain;
+            opacity: 0;
+            transform: scale(0.95);
+            transition: opacity 1.5s ease, transform 2s ease;
+            filter: drop-shadow(0 0 30px rgba(201, 160, 48, 0.2));
+            border-radius: 20px;
         }
 
-        .splash-shimmer {
+        .bride-groom-reveal.img-visible img {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .royal-doors {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 998;
+            pointer-events: none;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+
+        .royal-doors.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .royal-doors.opened {
+            pointer-events: none;
+        }
+
+        .royal-door {
+            position: absolute;
+            top: 0;
+            width: 50%;
+            height: 100%;
+            background: linear-gradient(180deg, #1a0808 0%, #2d1010 20%, #3d1414 50%, #2d1010 80%, #1a0808 100%);
+            transition: transform 6s cubic-bezier(0.16, 0.85, 0.45, 1);
+            overflow: hidden;
+        }
+
+        .royal-door::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: repeating-linear-gradient(
+                0deg,
+                transparent,
+                transparent 80px,
+                rgba(201, 160, 48, 0.05) 80px,
+                rgba(201, 160, 48, 0.05) 82px
+            );
+        }
+
+        .royal-door-left {
+            left: 0;
+            border-right: 2px solid #c9a030;
+            transform-origin: left center;
+        }
+
+        .royal-door-right {
+            right: 0;
+            border-left: 2px solid #c9a030;
+            transform-origin: right center;
+        }
+
+        .royal-doors.opened .royal-door-left {
+            transform: perspective(1500px) rotateY(-95deg);
+        }
+
+        .royal-doors.opened .royal-door-right {
+            transform: perspective(1500px) rotateY(95deg);
+        }
+
+        .door-ornament {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .door-ornament-ring {
             width: 80px;
-            height: 2px;
-            background: linear-gradient(90deg, transparent, #c9a030, transparent);
-            margin: 0 auto;
-            animation: splashShimmer 1.5s ease-in-out infinite;
+            height: 80px;
+            border: 2px solid rgba(201, 160, 48, 0.6);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
-        @keyframes splashShimmer {
-            0% { width: 30px; opacity: 0.3; }
-            50% { width: 100px; opacity: 1; }
-            100% { width: 30px; opacity: 0.3; }
+        .door-ornament-ring-inner {
+            width: 50px;
+            height: 50px;
+            border: 1.5px solid rgba(201, 160, 48, 0.4);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .door-ornament-dot {
+            width: 12px;
+            height: 12px;
+            background: #c9a030;
+            border-radius: 50%;
+            box-shadow: 0 0 10px rgba(201, 160, 48, 0.5);
+        }
+
+        .door-pattern {
+            position: absolute;
+            top: 15%;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+        }
+
+        .door-pattern-bottom {
+            top: auto;
+            bottom: 15%;
+        }
+
+        .door-arch {
+            width: 60px;
+            height: 100px;
+            border: 1.5px solid rgba(201, 160, 48, 0.3);
+            border-radius: 30px 30px 0 0;
+            border-bottom: none;
+        }
+
+        .door-vertical-line {
+            position: absolute;
+            top: 10%;
+            height: 80%;
+            width: 1px;
+            background: linear-gradient(180deg, transparent, rgba(201, 160, 48, 0.2), rgba(201, 160, 48, 0.4), rgba(201, 160, 48, 0.2), transparent);
+        }
+
+        .door-image {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: clamp(60%, 40vw, 90%);
+            height: clamp(40%, 50vh, 75%);
+            overflow: hidden;
+        }
+
+        .door-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        .royal-door-left .door-vertical-line {
+            right: 30%;
+        }
+
+        .royal-door-right .door-vertical-line {
+            left: 30%;
         }
 
         .section {
@@ -71,7 +456,6 @@
             justify-content: center;
             padding: 60px 24px;
             position: relative;
-            scroll-snap-align: start;
         }
 
         /* Section ornament dividers */
@@ -456,7 +840,6 @@
             background: linear-gradient(180deg, #f8f4eb 0%, #f5f0e4 100%);
             padding: 80px 24px;
             min-height: auto;
-            scroll-snap-align: start;
         }
 
         .celebrations-heading {
@@ -511,6 +894,11 @@
             transform: translateY(-2px);
         }
 
+        .save-date-btn:active {
+            transform: scale(0.95);
+            background: rgba(201, 160, 48, 0.2);
+        }
+
         .event-cards {
             display: flex;
             flex-direction: column;
@@ -526,13 +914,26 @@
             padding: 40px 24px;
             text-align: center;
             opacity: 0;
-            transform: translateY(40px);
-            transition: all 0.8s ease;
+            transform: translateY(40px) scale(0.85);
+            transition: none;
         }
 
         .event-card.visible {
-            opacity: 1;
-            transform: translateY(0);
+            animation: cardPopIn 1.4s cubic-bezier(0.22, 1.8, 0.5, 1) forwards;
+        }
+
+        .event-card.visible:nth-child(1) { animation-delay: 0s; }
+        .event-card.visible:nth-child(2) { animation-delay: 0.25s; }
+        .event-card.visible:nth-child(3) { animation-delay: 0.5s; }
+        .event-card.visible:nth-child(4) { animation-delay: 0.75s; }
+
+        @keyframes cardPopIn {
+            0% { opacity: 0; transform: translateY(100px) scale(0.5) rotate(-2deg); box-shadow: none; }
+            40% { opacity: 1; transform: translateY(-15px) scale(1.25) rotate(0.5deg); box-shadow: 0 30px 80px rgba(201, 160, 48, 0.4), 0 15px 40px rgba(0, 0, 0, 0.2); }
+            60% { transform: translateY(8px) scale(0.94) rotate(-0.3deg); box-shadow: 0 8px 20px rgba(201, 160, 48, 0.15); }
+            75% { transform: translateY(-4px) scale(1.05) rotate(0.1deg); box-shadow: 0 15px 40px rgba(201, 160, 48, 0.2); }
+            88% { transform: translateY(2px) scale(0.99); }
+            100% { opacity: 1; transform: translateY(0) scale(1) rotate(0deg); box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08); }
         }
 
         .event-icon {
@@ -579,7 +980,7 @@
 
         /* Section 4: Venue */
         .section-venue {
-            background: url('images/venue.png') center/cover no-repeat fixed;
+            background: url('images/venue.png') center/cover no-repeat scroll;
             position: relative;
             overflow: hidden;
             min-height: 100vh;
@@ -671,6 +1072,11 @@
             transform: translateY(-2px);
         }
 
+        .maps-btn:active {
+            transform: scale(0.95);
+            background: rgba(201, 160, 48, 0.2);
+        }
+
         /* Section 5: Our Story */
         .section-story {
             background: linear-gradient(180deg, #f8f4eb 0%, #f5f0e4 100%);
@@ -726,7 +1132,7 @@
         /* Section 6: Meet the Couple */
         .section-couple {
             background: radial-gradient(ellipse at center, #5c2020 0%, #3d1414 50%, #2d1010 100%);
-            padding: 80px 24px;
+            padding: 80px 24px 40px;
             position: relative;
             overflow: hidden;
         }
@@ -830,7 +1236,7 @@
         /* Section 7: Countdown */
         .section-countdown {
             background: linear-gradient(180deg, #2d1010 0%, #1f0a0a 50%, #150707 100%);
-            padding: 80px 24px;
+            padding: 40px 24px 80px;
             text-align: center;
             position: relative;
             overflow: hidden;
@@ -1061,6 +1467,11 @@
             background: rgba(201, 160, 48, 0.1);
         }
 
+        .rsvp-option:active {
+            transform: scale(0.95);
+            background: rgba(201, 160, 48, 0.2);
+        }
+
         .rsvp-option .radio {
             width: 20px;
             height: 20px;
@@ -1173,6 +1584,92 @@
             letter-spacing: 2px;
         }
 
+        /* Scroll hint overlay */
+        .scroll-hint-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.88);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10000;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 1s ease, visibility 1s ease;
+            pointer-events: none;
+        }
+
+        .scroll-hint-overlay.visible {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .scroll-hint-overlay.fade-out {
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        .scroll-hint-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 30px;
+            padding: 50px 60px;
+            border: 2px solid rgba(201, 160, 48, 0.5);
+            border-radius: 24px;
+            background: radial-gradient(ellipse at center, rgba(92, 32, 32, 0.9) 0%, rgba(45, 16, 16, 0.95) 100%);
+            box-shadow: 0 0 40px rgba(201, 160, 48, 0.2), 0 0 80px rgba(201, 160, 48, 0.1), inset 0 0 30px rgba(201, 160, 48, 0.05);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            animation: hintPulse 3s ease-in-out infinite;
+        }
+
+        @keyframes hintPulse {
+            0%, 100% { box-shadow: 0 0 40px rgba(201, 160, 48, 0.2), 0 0 80px rgba(201, 160, 48, 0.1), inset 0 0 30px rgba(201, 160, 48, 0.05); }
+            50% { box-shadow: 0 0 60px rgba(201, 160, 48, 0.35), 0 0 100px rgba(201, 160, 48, 0.15), inset 0 0 40px rgba(201, 160, 48, 0.08); }
+        }
+
+        .scroll-hint-text {
+            font-family: 'Cinzel', serif;
+            font-size: 20px;
+            font-weight: 600;
+            letter-spacing: 8px;
+            color: #f0e0a0;
+            text-shadow: 0 0 20px rgba(201, 160, 48, 0.8), 0 0 40px rgba(201, 160, 48, 0.4);
+        }
+
+        .scroll-hint-arrows {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .scroll-hint-chevron {
+            width: 28px;
+            height: 28px;
+            border-left: 3px solid #c9a030;
+            border-bottom: 3px solid #c9a030;
+            transform: rotate(-45deg);
+            opacity: 0;
+            animation: bounceDown 1.8s ease-in-out infinite;
+            filter: drop-shadow(0 0 8px rgba(201, 160, 48, 0.8));
+        }
+
+        .scroll-hint-chevron:nth-child(1) { animation-delay: 0s; }
+        .scroll-hint-chevron:nth-child(2) { animation-delay: 0.25s; }
+        .scroll-hint-chevron:nth-child(3) { animation-delay: 0.5s; }
+
+        @keyframes bounceDown {
+            0% { opacity: 0; transform: rotate(-45deg) translate(-5px, -5px); }
+            25% { opacity: 1; }
+            65% { opacity: 1; }
+            100% { opacity: 0; transform: rotate(-45deg) translate(10px, 10px); }
+        }
+
         /* Music toggle button */
         .music-toggle {
             position: fixed;
@@ -1234,6 +1731,8 @@
         /* Responsive */
         @media (min-width: 769px) {
             .section { padding: 100px 60px; }
+            .section-couple { padding-bottom: 50px; }
+            .section-countdown { padding-top: 50px; }
             .couple-name { font-size: 86px; }
             .invite-heading { font-size: 52px; }
             .celebrations-heading, .story-heading, .couple-heading { font-size: 52px; }
@@ -1251,6 +1750,8 @@
 
         @media (min-width: 481px) and (max-width: 768px) {
             .section { padding: 80px 40px; }
+            .section-couple { padding-bottom: 40px; }
+            .section-countdown { padding-top: 40px; }
             .couple-name { font-size: 72px; }
             .invite-heading { font-size: 44px; letter-spacing: 10px; }
             .celebrations-heading, .story-heading, .couple-heading { font-size: 44px; }
@@ -1262,6 +1763,8 @@
 
         @media (max-width: 480px) {
             .section { padding: 50px 18px; }
+            .section-couple { padding-bottom: 30px; }
+            .section-countdown { padding-top: 30px; }
             .couple-name { font-size: 48px; }
             .couple-ampersand { font-size: 28px; }
             .invite-heading { font-size: 30px; letter-spacing: 6px; }
@@ -1304,7 +1807,6 @@
             .divider { width: 45px; margin: 20px auto; }
             .scroll-indicator { margin-top: 30px; }
             .section-ornament { height: 40px; }
-            .section-venue { background-attachment: scroll; }
         }
 
         @media (max-width: 360px) {
@@ -1319,10 +1821,104 @@
     </style>
 </head>
 <body>
-    <!-- Loading Splash -->
-    <div class="splash" id="splash">
-        <div class="splash-content">
-            <div class="splash-shimmer"></div>
+    <!-- Cover Overlay -->
+    <div class="cover-overlay" id="coverOverlay">
+        <div class="cover-invitation">
+            <div class="cover-ornament">
+                <svg viewBox="0 0 300 30" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="150" cy="15" r="5" fill="#8a7a3a"/>
+                    <circle cx="150" cy="15" r="3" fill="#5c2020"/>
+                    <path d="M140 15 Q120 5 80 15" stroke="#8a7a3a" stroke-width="1" fill="none"/>
+                    <path d="M160 15 Q180 5 220 15" stroke="#8a7a3a" stroke-width="1" fill="none"/>
+                    <path d="M140 15 Q120 25 80 15" stroke="#8a7a3a" stroke-width="1" fill="none"/>
+                    <path d="M160 15 Q180 25 220 15" stroke="#8a7a3a" stroke-width="1" fill="none"/>
+                    <circle cx="80" cy="15" r="3" fill="#8a7a3a"/>
+                    <circle cx="220" cy="15" r="3" fill="#8a7a3a"/>
+                    <line x1="30" y1="15" x2="75" y2="15" stroke="#8a7a3a" stroke-width="0.5"/>
+                    <line x1="225" y1="15" x2="270" y2="15" stroke="#8a7a3a" stroke-width="0.5"/>
+                </svg>
+            </div>
+
+            <p class="cover-heading">YOU ARE INVITED TO THE WEDDING<br>OF</p>
+
+            <div class="cover-names">
+                <span class="cover-name">Ruhi</span>
+                <span class="cover-ampersand">&</span>
+                <span class="cover-name">Nishant</span>
+            </div>
+
+            <p class="cover-date">Dec 1 &mdash; 2, 2026</p>
+
+            <div class="cover-ornament-bottom">
+                <svg width="280" height="30" viewBox="0 0 300 30" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="150" cy="15" r="4" fill="#8a7a3a"/>
+                    <path d="M140 15 Q125 8 100 15" stroke="#8a7a3a" stroke-width="1" fill="none"/>
+                    <path d="M160 15 Q175 8 200 15" stroke="#8a7a3a" stroke-width="1" fill="none"/>
+                    <path d="M140 15 Q125 22 100 15" stroke="#8a7a3a" stroke-width="1" fill="none"/>
+                    <path d="M160 15 Q175 22 200 15" stroke="#8a7a3a" stroke-width="1" fill="none"/>
+                    <circle cx="100" cy="15" r="2.5" fill="#8a7a3a"/>
+                    <circle cx="200" cy="15" r="2.5" fill="#8a7a3a"/>
+                    <path d="M90 15 Q75 10 60 15" stroke="#8a7a3a" stroke-width="0.8" fill="none"/>
+                    <path d="M210 15 Q225 10 240 15" stroke="#8a7a3a" stroke-width="0.8" fill="none"/>
+                    <path d="M90 15 Q75 20 60 15" stroke="#8a7a3a" stroke-width="0.8" fill="none"/>
+                    <path d="M210 15 Q225 20 240 15" stroke="#8a7a3a" stroke-width="0.8" fill="none"/>
+                </svg>
+            </div>
+
+            <div class="cover-buttons">
+                <button class="cover-btn cover-btn-primary" onclick="enterWithMusic()">
+                    <span>&#9835;</span>
+                    OPEN WITH MUSIC
+                </button>
+                <button class="cover-btn cover-btn-secondary" onclick="enterQuietly()">
+                    ENTER QUIETLY
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bride-Groom Reveal -->
+    <div class="bride-groom-reveal" id="brideGroomReveal">
+        <img src="images/bride-groom.png" alt="Bride & Groom">
+    </div>
+
+    <!-- Scroll Hint -->
+    <div class="scroll-hint-overlay" id="scrollHint">
+        <div class="scroll-hint-content">
+            <span class="scroll-hint-text">SCROLL DOWN</span>
+            <div class="scroll-hint-arrows">
+                <div class="scroll-hint-chevron"></div>
+                <div class="scroll-hint-chevron"></div>
+                <div class="scroll-hint-chevron"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Royal Doors -->
+    <div class="royal-doors" id="royalDoors">
+        <div class="royal-door royal-door-left">
+            <div class="door-vertical-line"></div>
+            <div class="door-pattern">
+                <div class="door-arch"></div>
+            </div>
+            <div class="door-image">
+                <img src="images/bride-door.jpg" alt="Bride">
+            </div>
+            <div class="door-pattern door-pattern-bottom">
+                <div class="door-arch"></div>
+            </div>
+        </div>
+        <div class="royal-door royal-door-right">
+            <div class="door-vertical-line"></div>
+            <div class="door-pattern">
+                <div class="door-arch"></div>
+            </div>
+            <div class="door-image">
+                <img src="images/groom-door.jpg" alt="Groom">
+            </div>
+            <div class="door-pattern door-pattern-bottom">
+                <div class="door-arch"></div>
+            </div>
         </div>
     </div>
 
@@ -1663,12 +2259,64 @@
     </footer>
 
     <script>
-        // Splash screen - hide after 1.5s or on load, whichever comes first
-        function hideSplash() {
-            document.getElementById('splash').classList.add('hidden');
+        // Cover overlay
+        function hideCover() {
+            document.getElementById('coverOverlay').classList.add('hidden');
         }
-        setTimeout(hideSplash, 2000);
-        window.addEventListener('load', () => setTimeout(hideSplash, 500));
+
+        function showScrollHint() {
+            const hint = document.getElementById('scrollHint');
+            setTimeout(() => {
+                hint.classList.add('visible');
+            }, 500);
+
+            function hideOnScroll() {
+                if (window.scrollY > 50) {
+                    hint.classList.add('fade-out');
+                    window.removeEventListener('scroll', hideOnScroll);
+                }
+            }
+            window.addEventListener('scroll', hideOnScroll, { passive: true });
+        }
+
+        function openDoors() {
+            const doors = document.getElementById('royalDoors');
+            const brideGroom = document.getElementById('brideGroomReveal');
+            doors.classList.add('active');
+            // Image fades in as doors begin opening
+            setTimeout(() => {
+                brideGroom.classList.add('img-visible');
+            }, 300);
+            // Doors swing open
+            setTimeout(() => {
+                doors.classList.add('opened');
+            }, 200);
+            // Doors fade out as they finish opening
+            setTimeout(() => {
+                doors.style.transition = 'opacity 1.2s ease, visibility 1.2s ease';
+                doors.style.opacity = '0';
+                doors.style.visibility = 'hidden';
+            }, 5000);
+            // Image fades out quickly after doors gone
+            setTimeout(() => {
+                brideGroom.classList.add('fade-out');
+            }, 5500);
+        }
+
+        function enterWithMusic() {
+            bgMusic.play();
+            musicPlaying = true;
+            document.getElementById('musicToggle').classList.remove('paused');
+            hideCover();
+            openDoors();
+            setTimeout(showScrollHint, 10000);
+        }
+
+        function enterQuietly() {
+            hideCover();
+            openDoors();
+            setTimeout(showScrollHint, 10000);
+        }
 
         // Intersection Observer for scroll animations
         const observer = new IntersectionObserver((entries) => {
@@ -1677,7 +2325,7 @@
                     entry.target.classList.add('visible');
                 }
             });
-        }, { threshold: 0.2 });
+        }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
 
         document.querySelectorAll('.animate').forEach(el => observer.observe(el));
 
@@ -1709,38 +2357,22 @@
         updateCountdown();
         setInterval(updateCountdown, 1000);
 
-        // Music toggle with actual audio
+        // Music
         const bgMusic = document.getElementById('bgMusic');
         let musicPlaying = false;
-
-        // Auto-play if coming from "Open with Music"
-        if (new URLSearchParams(window.location.search).get('music') === '1') {
-            function startMusic() {
-                bgMusic.play().then(() => {
-                    musicPlaying = true;
-                    document.getElementById('musicToggle').classList.remove('paused');
-                }).catch(() => {
-                    document.addEventListener('click', function retryPlay() {
-                        bgMusic.play().then(() => {
-                            musicPlaying = true;
-                            document.getElementById('musicToggle').classList.remove('paused');
-                        }).catch(() => {});
-                    }, { once: true });
-                });
-            }
-            startMusic();
-        }
 
         function toggleMusic() {
             const toggle = document.getElementById('musicToggle');
             if (musicPlaying) {
                 bgMusic.pause();
                 toggle.classList.add('paused');
+                musicPlaying = false;
             } else {
-                bgMusic.play().catch(() => {});
-                toggle.classList.remove('paused');
+                bgMusic.play().then(() => {
+                    musicPlaying = true;
+                    toggle.classList.remove('paused');
+                }).catch(() => {});
             }
-            musicPlaying = !musicPlaying;
         }
 
         // Couple photo carousel with swipe support
@@ -1850,40 +2482,40 @@
             const location = 'Shashwat Resort, Shankardi, Jharkhand 828101';
             const startDate = '20261201';
             const endDate = '20261203';
+            const description = 'Wedding celebrations of Ruhi & Nishant';
+
+            const icsContent = [
+                'BEGIN:VCALENDAR',
+                'VERSION:2.0',
+                'PRODID:-//RuhiNishant//Wedding//EN',
+                'BEGIN:VEVENT',
+                'DTSTART;VALUE=DATE:' + startDate,
+                'DTEND;VALUE=DATE:' + endDate,
+                'SUMMARY:' + title,
+                'LOCATION:' + location,
+                'DESCRIPTION:' + description,
+                'END:VEVENT',
+                'END:VCALENDAR'
+            ].join('\r\n');
 
             const isIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent);
-            const isAndroid = /Android/i.test(navigator.userAgent);
 
-            if (isIOS || isAndroid) {
-                const icsContent = [
-                    'BEGIN:VCALENDAR',
-                    'VERSION:2.0',
-                    'BEGIN:VEVENT',
-                    'DTSTART;VALUE=DATE:' + startDate,
-                    'DTEND;VALUE=DATE:' + endDate,
-                    'SUMMARY:' + title,
-                    'LOCATION:' + location,
-                    'DESCRIPTION:Wedding celebrations of Ruhi & Nishant',
-                    'END:VEVENT',
-                    'END:VCALENDAR'
-                ].join('\r\n');
-
+            if (isIOS) {
+                const dataUri = 'data:text/calendar;charset=utf-8,' + encodeURIComponent(icsContent);
+                window.open(dataUri);
+            } else {
                 const blob = new Blob([icsContent], { type: 'text/calendar;charset=utf-8' });
                 const url = URL.createObjectURL(blob);
                 const link = document.createElement('a');
                 link.href = url;
                 link.download = 'ruhi-nishant-wedding.ics';
+                link.style.display = 'none';
                 document.body.appendChild(link);
                 link.click();
-                document.body.removeChild(link);
-                URL.revokeObjectURL(url);
-            } else {
-                const gcalUrl = 'https://calendar.google.com/calendar/render?action=TEMPLATE'
-                    + '&text=' + encodeURIComponent(title)
-                    + '&dates=' + startDate + '/' + endDate
-                    + '&location=' + encodeURIComponent(location)
-                    + '&details=' + encodeURIComponent('Wedding celebrations of Ruhi & Nishant');
-                window.open(gcalUrl, '_blank');
+                setTimeout(() => {
+                    document.body.removeChild(link);
+                    URL.revokeObjectURL(url);
+                }, 100);
             }
         }
     </script>
