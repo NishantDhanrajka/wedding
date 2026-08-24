@@ -3461,8 +3461,34 @@
             background: radial-gradient(ellipse at center, rgba(92, 32, 32, 0.35) 0%, transparent 60%);
             position: relative;
             overflow: hidden;
-            min-height: 100vh;
+            /* Not the full 100vh every other section takes. This one's content is
+               only about two thirds of a phone screen tall, and .section centres
+               it, so the leftover was being split into ~170px of nothing above it
+               and ~170px below — and the run below it lands right where the
+               Celebrations divider is, which read as one huge empty gap between
+               the two sections.
+
+               Trimming the padding would not have helped: box-sizing is
+               border-box, so with min-height: 100vh the padding comes out of the
+               same 100vh and the section stays exactly as tall. The reserved
+               height itself is the thing to cut. At 74vh the section hugs its
+               content at any normal viewport and still keeps a floor on a short
+               one; every decoration inside it (jharokha, godrays, bokeh,
+               fireflies) is inset/100%-based, so they all follow it down. */
+            min-height: 74vh;
         }
+
+        /* The two paddings that meet at this boundary. Now that the invite section
+           is content-driven rather than 100vh-bound its padding is real space
+           again, and .section gives it 100px on a desktop — directly above the
+           Celebrations divider — with another 100px on the far side of it before
+           the heading. Half of each is plenty.
+
+           Doubled class on purpose: .section's padding is set again inside three
+           width media queries further down the sheet, and at equal specificity
+           those would win on source order alone. */
+        .section.section-invite { padding-bottom: 44px; }
+        .section.section-celebrations { padding-top: 52px; }
 
         .fireflies {
             position: absolute;
@@ -3841,7 +3867,10 @@
             font-style: italic;
             font-size: 18px;
             color: #c9b98a;
-            margin-bottom: 30px;
+            /* The run from the heading down to the first card gained the venue
+               line and a day heading, so these three margins came in to pay for
+               them. */
+            margin-bottom: 18px;
             opacity: 0;
             transition: all 0.8s ease 0.2s;
         }
@@ -3864,7 +3893,7 @@
             letter-spacing: 3px;
             cursor: pointer;
             transition: all 0.3s ease;
-            margin-bottom: 50px;
+            margin-bottom: 34px;
             text-decoration: none;
         }
 
@@ -3893,7 +3922,7 @@
             display: inline-flex;
             align-items: center;
             gap: 9px;
-            margin-bottom: 26px;
+            margin-bottom: 18px;
             padding-bottom: 3px;
             border-bottom: 1px solid rgba(201, 160, 48, 0.28);
             opacity: 0;
@@ -4775,12 +4804,15 @@
             transition-delay: calc(var(--ev-t0) + 0.75s);
         }
 
-        /* width/height auto here, but the intrinsic ratio comes from the img's
-           width/height ATTRIBUTES in the markup. Without them a lazily-loaded
-           image has no size until its bytes arrive, so this panel — a replaced
-           element sized by content, inside two nested flex boxes — starts life
-           as a zero-height box. Chrome re-lays-out when the image lands; iOS
-           did not always, which left the panels blank. */
+        /* These four are NOT lazily loaded, and cannot be — see the markup.
+           width/height are auto so the panel can fit inside the stage on both
+           axes, which means this img has NO box at all until its bytes arrive:
+           the width/height attributes in the markup are presentational hints,
+           and an author `width: auto` beats them. A zero-area box never
+           intersects the viewport, so WebKit never starts a lazy load, so the
+           bytes never arrive. Verified in WKWebView: dropping `loading` fixes
+           it; giving the img a definite width does not, because the <picture>
+           around it is content-sized too. */
         .event-scene img {
             display: block;
             max-height: var(--ev-stage-h);
@@ -9590,6 +9622,11 @@
                             <p class="event-time">Noon Onwards</p>
                             <p class="event-description">The maternal uncle blesses the bride with gifts and jewellery — a heartfelt tradition of love from her mother's side.</p>
                             <span class="event-base-flourish" aria-hidden="true"></span>
+                            <!-- Do NOT put loading="lazy" back on these four panels:
+                                 the img has no box until it loads, and WebKit will not
+                                 lazy-load a zero-area box, so they stayed blank on iOS
+                                 for good. fetchpriority="low" keeps them out of the
+                                 intro's way instead. -->
                             <!-- Cropped from images/mayra_event.png: the gifts
                                  being presented, which is what Mayra is. Cropped to
                                  the scene — the artwork's upper half is an empty
@@ -9598,7 +9635,7 @@
                             <div class="event-stage" aria-hidden="true">
                                 <picture class="event-scene">
                                     <source srcset="images/scene-mayra.webp" type="image/webp">
-                                    <img src="images/scene-mayra.jpg" alt="" width="900" height="576" loading="lazy" decoding="async">
+                                    <img src="images/scene-mayra.jpg" alt="" width="900" height="576" fetchpriority="low" decoding="async">
                                 </picture>
                             </div>
                             <div class="event-footer">
@@ -9643,7 +9680,7 @@
                             <div class="event-stage" aria-hidden="true">
                                 <picture class="event-scene">
                                     <source srcset="images/scene-sangeet.webp" type="image/webp">
-                                    <img src="images/scene-sangeet.jpg" alt="" width="641" height="492" loading="lazy" decoding="async">
+                                    <img src="images/scene-sangeet.jpg" alt="" width="641" height="492" fetchpriority="low" decoding="async">
                                 </picture>
                             </div>
                             <div class="event-footer">
@@ -9696,7 +9733,7 @@
                             <div class="event-stage" aria-hidden="true">
                                 <picture class="event-scene">
                                     <source srcset="images/scene-haldi.webp" type="image/webp">
-                                    <img src="images/scene-haldi.jpg" alt="" width="346" height="397" loading="lazy" decoding="async">
+                                    <img src="images/scene-haldi.jpg" alt="" width="346" height="397" fetchpriority="low" decoding="async">
                                 </picture>
                             </div>
                             <div class="event-footer">
@@ -9742,7 +9779,7 @@
                             <div class="event-stage" aria-hidden="true">
                                 <picture class="event-scene">
                                     <source srcset="images/scene-vivah.webp" type="image/webp">
-                                    <img src="images/scene-vivah.jpg" alt="" width="579" height="700" loading="lazy" decoding="async">
+                                    <img src="images/scene-vivah.jpg" alt="" width="579" height="700" fetchpriority="low" decoding="async">
                                 </picture>
                             </div>
                             <div class="event-footer">
@@ -10453,7 +10490,16 @@
                         // so scrolling back re-plays. Never reset once user has passed it going down.
                     }
                 });
-            }, { threshold: 0.12, rootMargin: '0px 0px -100px 0px' });
+                // threshold: 0 plus a negative bottom margin, NOT a fraction of the
+                // section's own area. A fraction makes tall sections reveal late in
+                // absolute terms: Celebrations is ~3170px tall on a phone, so the old
+                // 0.12 wanted 380px of it in view, and until then the whole section
+                // sat at opacity: 0 behind the divider — which is what read as a huge
+                // empty gap between the invite and the celebrations. (A 930px section
+                // needed only 112px, so no other boundary showed it.) This way every
+                // section arrives once its top edge is 140px into the viewport,
+                // whatever its height.
+            }, { threshold: 0, rootMargin: '0px 0px -140px 0px' });
             targets.forEach(t => obs.observe(t));
         })();
 
@@ -10626,9 +10672,22 @@
                 zSections.forEach(section => {
                     const rect = section.getBoundingClientRect();
                     if (rect.bottom < -vh || rect.top > vh * 2) return; // offscreen, skip
-                    const sectionCenter = rect.top + rect.height / 2;
-                    const distFromCenter = sectionCenter - vh / 2;
-                    // norm: 0 at viewport center, +1 one screen below, -1 one above
+                    // Distance from the viewport centre to the NEAREST part of the
+                    // section, not to its centre. Measured centre-to-centre, a
+                    // section taller than the screen is still "a screen away" while
+                    // you are already reading its first line — Celebrations runs
+                    // ~3700px, so its centre sat a full viewport below the lens for
+                    // the whole time its heading was on screen, and the camera held
+                    // the entire section at maximum distance: 72% scale, 75% opacity,
+                    // pushed down by the waiting translateY. That is what made the
+                    // top of the section look like empty space after the divider.
+                    // Zero once the lens is anywhere inside the section.
+                    const mid = vh / 2;
+                    const distFromCenter = rect.top > mid ? rect.top - mid
+                                         : rect.bottom < mid ? rect.bottom - mid
+                                         : 0;
+                    // norm: 0 while the centre line is inside the section, +1 when the
+                    // section's near edge is one screen below, -1 one screen above
                     const norm = Math.max(-1.2, Math.min(1.5, distFromCenter / vh));
                     // Ahead of camera (below viewport) → deep negative Z;
                     // behind camera (scrolled past) → positive Z, slipping by the lens.
