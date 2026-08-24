@@ -5,7 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="theme-color" content="#2d1010">
     <title>Ruhi & Nishant — Wedding Invitation</title>
-    <link rel="preload" href="images/bride-groom.png" as="image">
+    <!-- images/*-web.* are the SERVED derivatives; the originals sit beside them
+         untouched. The originals are 1-3 MB each and the couple photos are
+         2768x4160 — around 46 MB of decoded RAM apiece, and roughly 250 MB across
+         the page, which is past what iOS Safari will hold. Over that budget WebKit
+         discards decoded image data and images render blank while the layout stays
+         put, which is what was happening to the event-card scene panels on a
+         phone. Re-point at an original only if you also shrink it. -->
+    <link rel="preload" href="images/bride-groom-web.jpg" as="image">
     <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Cinzel:wght@400;500;600;700&display=swap&font-display=swap" rel="stylesheet">
     <style>
         * {
@@ -4158,6 +4165,9 @@
                there'd be dead space between the two. */
             justify-content: flex-start;
             padding: 58px 26px 22px;
+            /* Turned off on touch devices further down — see the (hover: none)
+               block. It is the likely cause of the iOS clip and paint failures,
+               and it costs a full-viewport blur per card. */
             backdrop-filter: blur(6px);
             -webkit-backdrop-filter: blur(6px);
             /* The third shadow is the arch's soffit: a hard-edged inset falling from
@@ -4640,8 +4650,17 @@
             align-items: flex-start;
             justify-content: space-between;
             padding: 0 5%;
-            /* .flip-front clips overflow, so the dome trims the outer
-               strands exactly the way the arch does in the reference. */
+            /* The dome trims the outer strands, the way the arch does in the
+               reference. That used to be left to .flip-front's overflow: hidden,
+               and on iOS the strands escaped it and hung outside the card
+               entirely — a composited child is not reliably clipped by an
+               ancestor carrying backdrop-filter there. So this box now carries
+               the same curve and clips its own contents, depending on nothing:
+               the card's radius is 50%/34% of the CARD, and this box is the same
+               width but only 44% of its height, so the vertical radius over this
+               box is 34/44 = 77%. */
+            border-radius: 50% 50% 0 0 / 77% 77% 0 0;
+            overflow: hidden;
         }
 
         .event-hangings i {
@@ -4756,6 +4775,12 @@
             transition-delay: calc(var(--ev-t0) + 0.75s);
         }
 
+        /* width/height auto here, but the intrinsic ratio comes from the img's
+           width/height ATTRIBUTES in the markup. Without them a lazily-loaded
+           image has no size until its bytes arrive, so this panel — a replaced
+           element sized by content, inside two nested flex boxes — starts life
+           as a zero-height box. Chrome re-lays-out when the image lands; iOS
+           did not always, which left the panels blank. */
         .event-scene img {
             display: block;
             max-height: var(--ev-stage-h);
@@ -5252,6 +5277,26 @@
             filter: none;
         }
 
+        /* ---- Touch devices: the two things that broke the cards on iOS ----
+           1. backdrop-filter. A card is 74-93% opaque, so the blur behind it is
+              nearly invisible, and WebKit stops clipping composited descendants
+              of a backdrop-filtered box — which is how the hanging strands ended
+              up outside the card. It is also a full-viewport blur per card.
+           2. The panel's own filter. Only the palest card had one, but a
+              filtered, 3D-transformed image inside two nested clipped boxes is
+              the shape of thing that fails to paint at all on iOS. The lift it
+              gave is small enough to drop rather than gamble on.
+           Keyed on (hover: none) rather than a width: it is the engine and the
+           device that matter here, not how wide the window is. */
+        @media (hover: none) {
+            .flip-front {
+                backdrop-filter: none;
+                -webkit-backdrop-filter: none;
+            }
+
+            .ev-vivah .event-scene img { filter: none; }
+        }
+
         .no-immersion .event-scene img {
             transform: none;
             transition: none;
@@ -5292,7 +5337,7 @@
         .section-venue {
             background:
                 linear-gradient(180deg, rgba(31, 10, 10, 0.85) 0%, rgba(45, 16, 16, 0.65) 50%, rgba(31, 10, 10, 0.9) 100%),
-                url('images/venue.png') center/cover no-repeat scroll;
+                url('images/venue-web.jpg') center/cover no-repeat scroll;
             position: relative;
             overflow: hidden;
             min-height: 100vh;
@@ -9070,7 +9115,7 @@
             </div>
 
             <div class="photo-plate-frame" id="photoPlateFrame">
-                <img src="images/bride-groom.png" alt="Bride & Groom">
+                <img src="images/bride-groom-web.jpg" alt="Bride & Groom" width="1024" height="1536">
                 <!-- Overlaid frame SVG scales to the photo size -->
                 <svg class="plate-frame-svg" viewBox="0 0 400 500" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
                     <!-- Main outer rectangle -->
@@ -9289,7 +9334,7 @@
             </div>
 
             <div class="ganesh-icon animate scale-in float-gentle">
-                <img src="images/ganesh.png" alt="Lord Ganesh">
+                <img src="images/ganesh-web.webp" alt="Lord Ganesh" width="640" height="640" loading="lazy" decoding="async">
             </div>
 
             <!-- Right kalash: mirror of left -->
@@ -9553,7 +9598,7 @@
                             <div class="event-stage" aria-hidden="true">
                                 <picture class="event-scene">
                                     <source srcset="images/scene-mayra.webp" type="image/webp">
-                                    <img src="images/scene-mayra.jpg" alt="" loading="lazy" decoding="async">
+                                    <img src="images/scene-mayra.jpg" alt="" width="900" height="576" loading="lazy" decoding="async">
                                 </picture>
                             </div>
                             <div class="event-footer">
@@ -9598,7 +9643,7 @@
                             <div class="event-stage" aria-hidden="true">
                                 <picture class="event-scene">
                                     <source srcset="images/scene-sangeet.webp" type="image/webp">
-                                    <img src="images/scene-sangeet.jpg" alt="" loading="lazy" decoding="async">
+                                    <img src="images/scene-sangeet.jpg" alt="" width="641" height="492" loading="lazy" decoding="async">
                                 </picture>
                             </div>
                             <div class="event-footer">
@@ -9651,7 +9696,7 @@
                             <div class="event-stage" aria-hidden="true">
                                 <picture class="event-scene">
                                     <source srcset="images/scene-haldi.webp" type="image/webp">
-                                    <img src="images/scene-haldi.jpg" alt="" loading="lazy" decoding="async">
+                                    <img src="images/scene-haldi.jpg" alt="" width="346" height="397" loading="lazy" decoding="async">
                                 </picture>
                             </div>
                             <div class="event-footer">
@@ -9697,7 +9742,7 @@
                             <div class="event-stage" aria-hidden="true">
                                 <picture class="event-scene">
                                     <source srcset="images/scene-vivah.webp" type="image/webp">
-                                    <img src="images/scene-vivah.jpg" alt="" loading="lazy" decoding="async">
+                                    <img src="images/scene-vivah.jpg" alt="" width="579" height="700" loading="lazy" decoding="async">
                                 </picture>
                             </div>
                             <div class="event-footer">
@@ -9912,7 +9957,7 @@
                 <div class="divider"></div>
             </div>
             <div class="origami-panel unfold-3">
-                <img src="images/our-story.png" alt="Our story" class="story-image animate">
+                <img src="images/our-story-web.jpg" alt="Our story" class="story-image animate" width="1100" height="1100" loading="lazy" decoding="async">
                 <p class="story-text animate">
                     Two souls destined to be together, brought by fate and bound by love. And now, we come together to begin our forever.
                 </p>
@@ -10060,35 +10105,35 @@
             <div class="album-stack" id="albumStack">
                 <figure class="album-photo">
                     <span class="album-mat">
-                        <img src="images/couple1.jpg" alt="Ruhi and Nishant, photo 1" draggable="false" loading="lazy" decoding="async">
+                        <img src="images/couple1-web.jpg" width="1100" height="1653" alt="Ruhi and Nishant, photo 1" draggable="false" loading="lazy" decoding="async">
                     </span>
                     <i class="album-corner tl"></i><i class="album-corner tr"></i>
                     <i class="album-corner bl"></i><i class="album-corner br"></i>
                 </figure>
                 <figure class="album-photo">
                     <span class="album-mat">
-                        <img src="images/couple2.jpg" alt="Ruhi and Nishant, photo 2" draggable="false" loading="lazy" decoding="async">
+                        <img src="images/couple2-web.jpg" width="1100" height="1653" alt="Ruhi and Nishant, photo 2" draggable="false" loading="lazy" decoding="async">
                     </span>
                     <i class="album-corner tl"></i><i class="album-corner tr"></i>
                     <i class="album-corner bl"></i><i class="album-corner br"></i>
                 </figure>
                 <figure class="album-photo">
                     <span class="album-mat">
-                        <img src="images/couple3.jpg" alt="Ruhi and Nishant, photo 3" draggable="false" loading="lazy" decoding="async">
+                        <img src="images/couple3-web.jpg" width="1100" height="1653" alt="Ruhi and Nishant, photo 3" draggable="false" loading="lazy" decoding="async">
                     </span>
                     <i class="album-corner tl"></i><i class="album-corner tr"></i>
                     <i class="album-corner bl"></i><i class="album-corner br"></i>
                 </figure>
                 <figure class="album-photo">
                     <span class="album-mat">
-                        <img src="images/couple4.jpg" alt="Ruhi and Nishant, photo 4" draggable="false" loading="lazy" decoding="async">
+                        <img src="images/couple4-web.jpg" width="1100" height="1653" alt="Ruhi and Nishant, photo 4" draggable="false" loading="lazy" decoding="async">
                     </span>
                     <i class="album-corner tl"></i><i class="album-corner tr"></i>
                     <i class="album-corner bl"></i><i class="album-corner br"></i>
                 </figure>
                 <figure class="album-photo">
                     <span class="album-mat">
-                        <img src="images/couple5.jpg" alt="Ruhi and Nishant, photo 5" draggable="false" loading="lazy" decoding="async">
+                        <img src="images/couple5-web.jpg" width="1100" height="1653" alt="Ruhi and Nishant, photo 5" draggable="false" loading="lazy" decoding="async">
                     </span>
                     <i class="album-corner tl"></i><i class="album-corner tr"></i>
                     <i class="album-corner bl"></i><i class="album-corner br"></i>
