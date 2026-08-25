@@ -904,6 +904,27 @@
             background: linear-gradient(270deg, transparent, rgba(212, 167, 52, 0.75));
         }
 
+        /* Venue under the closing ornament, in the same small-caps voice as the
+           heading so the card is bracketed by type rather than trailing off. */
+        .cover-venue {
+            font-family: 'Cinzel', serif;
+            font-size: clamp(9.5px, 2.6vw, 11.5px);
+            font-weight: 400;
+            letter-spacing: 3.4px;
+            text-transform: uppercase;
+            color: #9c8a52;
+            text-align: center;
+            margin-top: 16px;
+            line-height: 2;
+            opacity: 0;
+            animation: coverFadeIn 1s ease forwards 1.8s;
+        }
+
+        .cover-venue .cover-venue-dot {
+            color: rgba(212, 167, 52, 0.85);
+            margin: 0 7px;
+        }
+
         .cover-heading {
             font-family: 'Cinzel', serif;
             font-size: clamp(14px, 3.7vw, 18px);
@@ -954,6 +975,17 @@
             animation: coverFadeScale 1s ease forwards 1.4s;
         }
 
+        .cover-date {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: clamp(20px, 5.4vw, 27px);
+            font-weight: 300;
+            color: #a89860;
+            letter-spacing: 3px;
+            margin-top: 22px;
+            opacity: 0;
+            animation: coverFadeIn 1s ease forwards 2s;
+        }
+
         .cover-ornament-bottom {
             margin-top: 30px;
             opacity: 0;
@@ -971,7 +1003,9 @@
             .cover-ornament { height: 24px; }
             .cover-heading { margin-top: 18px; }
             .cover-names { margin: 16px 0; }
+            .cover-date { margin-top: 14px; }
             .cover-ornament-bottom { margin-top: 18px; }
+            .cover-venue { margin-top: 10px; }
         }
 
         @media (max-height: 760px) {
@@ -981,7 +1015,9 @@
             .cover-heading { font-size: clamp(12px, 3.2vw, 15px); margin-top: 12px; }
             .cover-shubh { font-size: clamp(14px, 3.8vw, 17px); }
             .cover-names { margin: 12px 0; }
+            .cover-date { font-size: clamp(17px, 4.6vw, 22px); margin-top: 10px; }
             .cover-ornament-bottom { margin-top: 12px; }
+            .cover-venue { margin-top: 8px; }
         }
 
         .cover-buttons {
@@ -1042,29 +1078,147 @@
             box-shadow: 0 4px 15px rgba(200, 160, 40, 0.2);
         }
 
+        /* Gold wax seal — the "tap to open" entry point */
+        .wax-seal {
+            position: relative;
+            width: 118px;
+            height: 118px;
+            border: none;
+            cursor: pointer;
+            border-radius: 47% 53% 51% 49% / 52% 48% 52% 48%;
+            background:
+                radial-gradient(circle at 32% 28%, rgba(255, 240, 180, 0.85) 0%, rgba(255, 240, 180, 0) 32%),
+                radial-gradient(circle at 70% 78%, rgba(90, 55, 5, 0.55) 0%, rgba(90, 55, 5, 0) 45%),
+                radial-gradient(circle at 50% 50%, #d4a734 0%, #b8871f 55%, #8a5a1a 100%);
+            box-shadow:
+                inset 0 3px 6px rgba(255, 245, 200, 0.5),
+                inset 0 -4px 8px rgba(60, 35, 0, 0.55),
+                0 6px 20px rgba(0, 0, 0, 0.55),
+                0 0 40px rgba(212, 167, 52, 0.25);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: waxSealPulse 2.6s ease-in-out infinite;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .wax-seal:hover {
+            transform: scale(1.06);
+            box-shadow:
+                inset 0 3px 6px rgba(255, 245, 200, 0.5),
+                inset 0 -4px 8px rgba(60, 35, 0, 0.55),
+                0 8px 26px rgba(0, 0, 0, 0.6),
+                0 0 55px rgba(212, 167, 52, 0.45);
+        }
+
+        .wax-seal:active {
+            transform: scale(0.94);
+        }
+
+        /* Two impressed rings rather than one dashed one: a fine bead run struck
+           into the wax, with a continuous rule inside it. The old single dashed
+           border read as a dotted line drawn on a gold disc rather than as
+           something pressed into wax. */
+        .wax-seal-ring {
+            position: absolute;
+            inset: 9px;
+            border-radius: 50%;
+            pointer-events: none;
+            /* Bead run: dark dots for the depressions, a light dot offset a pixel
+               up for the lip each one throws. */
+            background-image:
+                radial-gradient(circle, rgba(255, 244, 196, 0.55) 1.15px, transparent 1.6px),
+                radial-gradient(circle, rgba(58, 33, 0, 0.5) 1.15px, transparent 1.6px);
+            background-position: 0 -1px, 0 0;
+            /* A ring of beads, not a filled field: the mask keeps only the rim. */
+            -webkit-mask-image: radial-gradient(circle closest-side,
+                transparent 78%, #000 82%, #000 100%);
+            mask-image: radial-gradient(circle closest-side,
+                transparent 78%, #000 82%, #000 100%);
+            background-size: 9px 9px;
+        }
+
+        .wax-seal-ring::before {
+            content: '';
+            position: absolute;
+            inset: 7px;
+            border-radius: 50%;
+            border-top: 1px solid rgba(58, 33, 0, 0.42);
+            border-left: 1px solid rgba(58, 33, 0, 0.36);
+            border-bottom: 1px solid rgba(255, 244, 196, 0.4);
+            border-right: 1px solid rgba(255, 244, 196, 0.32);
+        }
+
+        /* Two small lotuses struck above and below the wording, filling the wax
+           the way a real seal's die would. */
+        .wax-seal-motif {
+            position: absolute;
+            left: 50%;
+            width: 30px;
+            height: 12px;
+            transform: translateX(-50%);
+            pointer-events: none;
+            color: rgba(58, 33, 0, 0.62);
+            filter: drop-shadow(0 -1px 0 rgba(255, 244, 196, 0.45));
+        }
+
+        .wax-seal-motif svg { width: 100%; height: 100%; display: block; }
+        .wax-seal-motif.top { top: 21px; }
+        .wax-seal-motif.bottom { bottom: 21px; transform: translateX(-50%) scaleY(-1); }
+
+        .wax-seal-text {
+            font-family: 'Cinzel', serif;
+            font-size: 15px;
+            font-weight: 600;
+            line-height: 1.25;
+            letter-spacing: 1px;
+            color: #3d2408;
+            text-shadow: 0 1px 0 rgba(255, 240, 180, 0.5);
+            text-align: center;
+            pointer-events: none;
+        }
+
+        @keyframes waxSealPulse {
+            0%, 100% { box-shadow: inset 0 3px 6px rgba(255, 245, 200, 0.5), inset 0 -4px 8px rgba(60, 35, 0, 0.55), 0 6px 20px rgba(0, 0, 0, 0.55), 0 0 30px rgba(212, 167, 52, 0.2); }
+            50% { box-shadow: inset 0 3px 6px rgba(255, 245, 200, 0.5), inset 0 -4px 8px rgba(60, 35, 0, 0.55), 0 6px 20px rgba(0, 0, 0, 0.55), 0 0 55px rgba(212, 167, 52, 0.5); }
+        }
+
         /* ============================================================
-           THE COVER — a painted panel that opens down the middle
-           (first thing guests see)
+           THE CLOSED ENVELOPE  (first thing guests see)
 
-           Modelled on the third reference clip: one full-bleed illustrated
-           panel — a cusped arch, YOU ARE INVITED in a cartouche, the couple
-           standing under it, OPEN INVITE at the foot — which splits down the
-           centre into two leaves that part and fade, handing over to the letter
-           behind. The clip's panel is ivory and blush; this one keeps the card's
-           maroon and gold, and reuses the same embroidery vocabulary (embossed
-           sprigs, buti field, zari border, keri corners) the rest of the site
-           wears.
+           Modelled on the e-invite envelope in the reference clip: one
+           full-bleed sheet of embossed paper, a wide top flap whose bottom edge
+           is a shallow V, a gold wax seal struck over the point of that V, and
+           YOU ARE INVITED between two gold sprays at the foot. Tapping the seal
+           lifts the flap away from its top crease, the dark inside of the
+           envelope opens up behind it, and light climbs out of the mouth until
+           it washes the screen and hands over to the letter.
 
-           HOW THE SPLIT WORKS. Each leaf is 50% of the cover and clips its
-           overflow. Inside each one sits a copy of the WHOLE panel at 200%
-           width, pinned to that side — so the left leaf shows the panel's left
-           half and the right leaf its right half, and every painted thing that
-           crosses the centre (the arch, the cartouche, the border) is cut
-           exactly in two. That is what makes the parting read as one picture
-           opening rather than two pictures sliding. It costs drawing the panel
-           twice, which is the price of the effect.
+           The clip's envelope is dusty rose; ours keeps the card's maroon and
+           gold, so the embossing is tone-on-tone maroon relief (a light stroke
+           with a dark one a hair below it) rather than pale-on-pale.
+
+           GEOMETRY — every edge is a percentage of the envelope's height, and
+           all of it is driven from these numbers so the flap, its shadow, the
+           pocket and the inside can never drift apart:
+
+              --env-shoulder    where the V leaves the side edges
+              --env-vee         the point of the V, down the centre
+              --env-seal-y      the seal, struck just above that point
+              --env-inside-peak how far up the open mouth reaches
+
+           The flap's V and the pocket's fold are the SAME line: the flap lies
+           right along the pocket's edge, which is why the reference shows one
+           V with a double gilt rule on it rather than two separate diagonals.
+           Giving them different points was tried and it opens a wedge of bare
+           cavity below the flap while the envelope is still shut.
+
+           Closed, the flap (full width to --env-shoulder, then tapering to
+           --env-vee) and the pocket (everything below that same V) cover the
+           inside completely; nothing dark shows until the flap moves.
            ============================================================ */
-        .cover-doors {
+        .envelope {
             position: absolute;
             top: 0;
             bottom: 0;
@@ -1073,631 +1227,46 @@
             max-width: 500px;
             transform: translateX(-50%);
             z-index: 2;
-            /* The leaves swing on their outer edges as they part. Long, i.e.
-               weak: in the clip they stay full width, so the camera is far. */
-            perspective: 2600px;
-            perspective-origin: 50% 44%;
-            transform-origin: 50% 44%;
-            transition: transform 1.9s cubic-bezier(0.33, 0.05, 0.22, 1),
-                        opacity 0.9s ease 0.5s;
-        }
-
-        /* The camera advances through the opening. This is the piece that was
-           missing and the reason the parting looked forced: in the clip the whole
-           panel GROWS as it splits — read it off the cartouche, which is visibly
-           larger at 3.0s than at 1.2s and larger again at 3.4s — because you are
-           moving through the doorway rather than watching two panels slide off a
-           wall. Without it the leaves just get yanked sideways. */
-        .cover-overlay.opening .cover-doors {
-            transform: translateX(-50%) scale(1.34);
-        }
-
-        .cd-leaf {
-            position: absolute;
-            top: 0;
-            bottom: 0;
-            width: 50%;
             overflow: hidden;
-            backface-visibility: hidden;
-            /* Both on the same long, gently decelerating curve, and the fade runs
-               from the first frame rather than waiting: in the clip the layer
-               behind is already bleeding through the panel before the gap is
-               properly open, so the whole thing reads as a dissolve with a hint
-               of parting — not as a door being pulled away and then hidden.
 
-               The opacity curve is nearly linear through its middle on purpose.
-               It used to be cubic-bezier(0.4, 0, 0.7, 1), which is ease-IN: the
-               leaves sat at almost full strength for the first second and then
-               dropped away all at once — still near-opaque at 0.9s, when the letter
-               begins coming up. They are at 24% there now. */
-            transition: transform 1.9s cubic-bezier(0.33, 0.05, 0.22, 1),
-                        opacity 1.55s cubic-bezier(0.35, 0.22, 0.45, 1);
-            will-change: transform, opacity;
-        }
+            --env-shoulder: 42%;
+            --env-vee: 58%;
+            --env-seal-y: 53%;
+            --env-inside-peak: 12%;
+            --env-inside-shoulder: 34%;
+            /* Width of the gold hairline along a fold, as a vertical offset of
+               the inner clip. Along the diagonal it comes out a little finer,
+               which is what a folded gilt edge does. */
+            --env-rim: 1.6px;
+            /* The second rule of the double run, and its own hairline */
+            --env-rule: 5.4px;
+            --env-rule-in: 6.9px;
+            /* The run of satin ticks inside that rule */
+            --env-bead: 11px;
+            --env-bead-in: 12.6px;
 
-        .cd-leaf.left  { left: 0;  transform-origin: left center; }
-        .cd-leaf.right { right: 0; transform-origin: right center; }
-
-        /* The panel itself, at double width so each leaf shows its own half */
-        /* The clip's own ground: warm ivory at the head, blushing through the
-           middle, a paler wash at the foot where the couple stand. The maroon
-           this used to be is why the peacock and the parrot looked pasted on —
-           they are painted for a light panel, and so is shadi.png. */
-        .cd-panel {
-            position: absolute;
-            top: 0;
-            bottom: 0;
-            width: 200%;
             background:
+                /* Laid-paper grain: a fine horizontal chain line over a vertical
+                   tooth, both barely a tint, so the sheet reads as stock rather
+                   than as a flat gradient. */
                 repeating-linear-gradient(0deg,
-                    rgba(255, 255, 255, 0.05) 0 1px, rgba(160, 120, 95, 0.035) 1px 3px),
+                    rgba(255, 236, 208, 0.022) 0 1px, rgba(0, 0, 0, 0.03) 1px 3px),
                 repeating-linear-gradient(90deg,
-                    rgba(255, 255, 255, 0.04) 0 1px, rgba(160, 120, 95, 0.025) 1px 2px),
-                radial-gradient(ellipse 72% 52% at 50% 34%,
-                    rgba(255, 252, 245, 0.85) 0%, rgba(255, 252, 245, 0) 72%),
-                radial-gradient(ellipse 90% 60% at 50% 100%,
-                    rgba(226, 206, 214, 0.5) 0%, rgba(226, 206, 214, 0) 70%),
-                linear-gradient(168deg, #f7efe2 0%, #f2ded2 46%, #eddbd4 100%);
+                    rgba(255, 236, 208, 0.016) 0 1px, rgba(0, 0, 0, 0.022) 1px 2px),
+                linear-gradient(160deg, #4a1a1a 0%, #3d1414 45%, #301010 100%);
+            /* The flap peels away from the top of the sheet, so the top of the
+               sheet stays in its shade. */
+            box-shadow: inset 0 20px 26px -16px rgba(0, 0, 0, 0.45);
+            /* Perspective for the flap's swing — long, i.e. weak. Safe here:
+               .envelope is not position: fixed, so this makes no
+               fixed-containing-block. At 1150px the flap narrowed into a
+               trapezoid as it went over and opened dark bands down either side
+               of the sheet; the reference clip's flap keeps its width, so the
+               camera wants to be far away. */
+            perspective: 2600px;
+            perspective-origin: 50% 45%;
+            transition: opacity 0.9s ease 0.5s, transform 0.9s ease 0.5s;
         }
-
-        .cd-leaf.left  .cd-panel { left: 0; }
-        .cd-leaf.right .cd-panel { right: 0; }
-
-        /* ---- The arch, drawn across the whole panel so the seam halves it ---- */
-        .cd-arch {
-            position: absolute;
-            left: 7%;
-            right: 7%;
-            top: 4%;
-            bottom: 0;
-            color: rgba(191, 122, 86, 0.9);
-            filter: drop-shadow(0 1px 0 rgba(255, 253, 246, 0.7));
-            pointer-events: none;
-        }
-
-        .cd-arch > svg { width: 100%; height: 100%; display: block; }
-
-        /* ---- YOU ARE INVITED, in a cartouche under the crown ---- */
-        .cd-cartouche {
-            position: absolute;
-            top: 13%;
-            left: 50%;
-            width: min(230px, 48%);
-            transform: translateX(-50%);
-            pointer-events: none;
-            color: rgba(160, 106, 44, 0.95);
-            filter: drop-shadow(0 2px 3px rgba(158, 116, 96, 0.3));
-        }
-
-        .cd-cartouche > svg { width: 100%; height: auto; display: block; }
-
-        .cd-cartouche-text {
-            position: absolute;
-            inset: 0;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            gap: 3px;
-            font-family: 'Cinzel', serif;
-            font-size: 14px;
-            font-weight: 700;
-            letter-spacing: 5.5px;
-            line-height: 1.24;
-            /* The site's own maroon rather than more gold: on the ivory plate,
-               gold on gold was the faintest thing on the panel, and this ties the
-               words to the card waiting behind them. */
-            color: #7d2420;
-            /* Half the letter-spacing, not all of it: the trailing space after the
-               last glyph widens the line box by 5.5px, so centring leaves the ink
-               2.75px left of centre. Indenting by the full 5.5 overshoots by the
-               same amount the other way. */
-            text-indent: 2.75px;
-            text-shadow: 0 1px 0 rgba(255, 255, 255, 0.9);
-        }
-
-        /* ---- The pillars the arch springs from ----
-           The arch symbol draws its own jambs; these give them a capital, a
-           fluted shaft and a plinth, which is what stops the arch reading as a
-           line floating on the panel. Hairline rules rather than drawn stone —
-           the same language as the zari border. The jambs sit at 4% and 96% of
-           the arch box, and the arch is inset 7%, so 10.4% / 89.6% of the panel. */
-        .cd-pillar {
-            position: absolute;
-            bottom: 0;
-            width: 26px;
-            height: 66%;
-            transform: translateX(-50%);
-            pointer-events: none;
-            /* three flutes down the shaft, fading out toward the foot */
-            background-image: repeating-linear-gradient(90deg,
-                transparent 0 6px,
-                rgba(191, 130, 96, 0.42) 6px 7px,
-                transparent 7px 13px);
-            -webkit-mask-image: linear-gradient(180deg, #000 0 76%, transparent 100%);
-            mask-image: linear-gradient(180deg, #000 0 76%, transparent 100%);
-        }
-
-        .cd-pillar.left  { left: 10.4%; }
-        .cd-pillar.right { left: 89.6%; }
-
-        /* capital */
-        .cd-pillar::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -6px;
-            right: -6px;
-            height: 9px;
-            border-top: 1px solid rgba(176, 116, 82, 0.7);
-            border-bottom: 1px solid rgba(176, 116, 82, 0.45);
-            background: linear-gradient(180deg,
-                rgba(191, 130, 96, 0.16), rgba(191, 130, 96, 0.02));
-        }
-
-        /* plinth */
-        .cd-pillar::after {
-            content: '';
-            position: absolute;
-            bottom: 4%;
-            left: -8px;
-            right: -8px;
-            height: 7px;
-            border-top: 1px solid rgba(176, 116, 82, 0.55);
-            border-bottom: 1px solid rgba(176, 116, 82, 0.38);
-        }
-
-        /* ---- Foliage over the arch's shoulders, and the two creatures ----
-           In the clip's own positions: sprays in the spandrels either side of the
-           crown, something on the wing beneath it. Its peacock and parrot are
-           watercolour illustrations and are NOT here — see the note in the
-           markup. ---- */
-        .cd-spray {
-            position: absolute;
-            top: 7%;
-            width: 21%;
-            pointer-events: none;
-            color: rgba(116, 145, 96, 0.9);
-            filter: drop-shadow(0 1px 0 rgba(255, 253, 246, 0.6));
-        }
-
-        .cd-spray svg { width: 100%; height: auto; display: block; }
-        .cd-spray.left  { left: 7%; }
-
-        /* ---- The peacock and the parrot (supplied artwork) ----
-           Where the clip puts them: the peacock standing at the foot on the left,
-           the parrot perched in the right-hand spandrel. Each sits wholly within
-           one leaf, so the parting carries one away with each half rather than
-           cutting either of them in two.
-
-           Both webps are TONE-MATCHED to the panel, not the artwork as supplied:
-           the vivid versions measured median saturation 0.90 and 0.92 with a tenth
-           of their pixels darker than value 0.16, against 0.34 and value 0.93 for
-           the couple standing beside them on the same ivory. Three times the
-           saturation of the focal point is what made them read as pasted on.
-
-           They now sit at 0.20 and 0.26 — under the couple, which is where
-           decoration belongs. Matching the couple exactly was the first attempt and
-           it wasn't enough: a saturated hue that is nowhere else on the panel still
-           jumps off near-white ivory even at the same measured saturation, and the
-           parrot's green is the worst offender. There is a small CSS opacity knock
-           as well, so the paper reads faintly through them. Below about 0.15 the
-           peacock stops being blue and it just looks faded; that is the floor.
-           images/cover-*-vivid.webp are the untreated copies, and peacock2.png /
-           parrot1.png are the originals.
-
-           The shadow is wide and faint rather than tight: a painted bird on painted
-           paper doesn't throw a sticker's edge. The peacock also gets a contact
-           shadow at its feet, or it hovers. ---- */
-        .cd-peacock {
-            position: absolute;
-            left: 1%;
-            /* Clear of OPEN INVITE, which lives at 96px */
-            bottom: 18%;
-            width: 26%;
-            height: auto;
-            opacity: 0.93;
-            pointer-events: none;
-            filter: drop-shadow(0 5px 16px rgba(158, 116, 96, 0.22));
-        }
-
-        /* The ground the peacock stands on. Sized and placed off .cd-peacock's own
-           box, so it follows the bird at every width. */
-        .cd-peacock-shadow {
-            position: absolute;
-            left: 3%;
-            bottom: 17.6%;
-            width: 22%;
-            height: 12px;
-            pointer-events: none;
-            background: radial-gradient(ellipse at 50% 50%,
-                        rgba(150, 112, 92, 0.3) 0%,
-                        rgba(150, 112, 92, 0.14) 46%,
-                        rgba(150, 112, 92, 0) 74%);
-        }
-
-        .cd-parrot {
-            position: absolute;
-            right: 2%;
-            top: 5%;
-            width: 21%;
-            height: auto;
-            opacity: 0.93;
-            pointer-events: none;
-            filter: drop-shadow(0 5px 15px rgba(158, 116, 96, 0.2));
-        }
-
-        .cd-bird {
-            position: absolute;
-            top: 8.5%;
-            left: 33%;
-            width: 12%;
-            pointer-events: none;
-            color: rgba(74, 132, 130, 0.85);
-            filter: drop-shadow(0 1px 0 rgba(255, 253, 246, 0.6));
-        }
-
-        .cd-butterfly {
-            position: absolute;
-            top: 23.5%;
-            right: 20%;
-            width: 8%;
-            pointer-events: none;
-            color: rgba(150, 114, 162, 0.8);
-            filter: drop-shadow(0 1px 0 rgba(255, 253, 246, 0.6));
-        }
-
-        .cd-bird svg,
-        .cd-butterfly svg { width: 100%; height: auto; display: block; }
-
-        /* ---- The couple ----
-           images/shadi.png, cropped about their joined hands and centred on the
-           panel, so the seam runs BETWEEN them and the parting walks the two
-           apart — which is what the reference clip does with its own couple.
-           Inside .cd-panel rather than in the leaf, or it would not be split.
-
-           The painted plate keeps its own cream ground; the alpha feather is
-           baked into the webp rather than done with a CSS mask, so there is one
-           less engine difference to worry about and nothing to re-blur per
-           frame while the leaves are moving. ---- */
-        .cd-couple {
-            position: absolute;
-            left: 50%;
-            /* bottom in px, not a percentage: it has to clear OPEN INVITE and
-               ENTER QUIETLY, and those are px-positioned too — at 15% the button
-               crossed the plate's foot on a 780px-tall screen. Height stays
-               relative so the couple scale with the panel.
-
-               And low enough that the cartouche above stays on the maroon: gold
-               small caps on the plate's cream ground came out at about 2:1. */
-            bottom: 152px;
-            height: 57%;
-            width: auto;
-            transform: translateX(-50%);
-            pointer-events: none;
-            filter: drop-shadow(0 12px 22px rgba(158, 116, 96, 0.35));
-        }
-
-        /* ---- The light the parting opens onto ----
-           Behind both leaves and inside .cover-doors, so the camera push carries
-           it outward with them and the container's own fade is what hands it to
-           the letter. It is the panel's own ivory, brightest where the crease is
-           about to open.
-
-           This is what stops the cover reading as bright -> black -> bright. The
-           invitation behind the cover is deep maroon; without a plate of light in
-           between, the crease opened onto near-darkness and the leaves dissolved
-           into it. See "OPENING THE COVER". ---- */
-        .cd-veil {
-            position: absolute;
-            inset: -2% -6%;
-            z-index: 0;
-            pointer-events: none;
-            opacity: 0;
-            /* Warm cream rather than the panel's neutral ivory, and deliberately
-               so: this layer spends half a second at partial opacity OVER the
-               maroon invitation, and neutral ivory at 50% over maroon mixes to a
-               flat grey-mauve — the crossfade went muddy right at its midpoint.
-               Warmed to candlelight, the same midpoint lands on a soft terracotta
-               and the whole handover stays lit. */
-            background:
-                radial-gradient(ellipse 58% 46% at 50% 44%,
-                    #fffaec 0%,
-                    rgba(253, 240, 214, 0.97) 42%,
-                    rgba(246, 223, 186, 0.94) 100%),
-                linear-gradient(180deg, #fbf1dd, #f4e0c6);
-            /* Short, and it only has to beat the gap opening far enough to see
-               through: measured, the leaves have moved 0.5px at 150ms and 2.8px at
-               300ms, so this is up well before there is anything to see through. */
-            transition: opacity 0.2s ease;
-        }
-
-        /* ---- The join ---- */
-        .cd-edge {
-            position: absolute;
-            top: 0;
-            bottom: 0;
-            width: 14px;
-            pointer-events: none;
-            /* Lets go over the first half second of the parting. A crease shadow
-               wants a surface close by to fall on, and once the leaves are 40px
-               apart there isn't one — held at full strength it read as two black
-               bars running down the middle of the panel. */
-            transition: opacity 0.5s ease-out;
-        }
-
-        .cd-leaf.left .cd-edge {
-            right: 0;
-            background: linear-gradient(90deg,
-                rgba(150, 108, 84, 0) 0%, rgba(150, 108, 84, 0.12) 70%, rgba(120, 84, 62, 0.22) 100%);
-        }
-
-        .cd-leaf.right .cd-edge {
-            left: 0;
-            background: linear-gradient(270deg,
-                rgba(150, 108, 84, 0) 0%, rgba(150, 108, 84, 0.12) 70%, rgba(120, 84, 62, 0.22) 100%);
-        }
-
-        /* The hairline where the two leaves meet, and the light that grows in it
-           as they part. Sits above both leaves, so it reads as a gap opening
-           rather than as an edge painted on one of them. */
-        .cd-seam {
-            position: absolute;
-            top: 0;
-            bottom: 0;
-            left: 50%;
-            width: 1px;
-            transform: translateX(-50%);
-            z-index: 3;
-            pointer-events: none;
-            background: rgba(140, 96, 70, 0.45);
-            opacity: 0.8;
-        }
-
-        .cd-glow {
-            position: absolute;
-            top: -4%;
-            bottom: -4%;
-            left: 50%;
-            width: 40%;
-            transform: translateX(-50%) scaleX(0.04);
-            z-index: 4;
-            pointer-events: none;
-            opacity: 0;
-            mix-blend-mode: screen;
-            background: radial-gradient(ellipse 50% 50% at 50% 50%,
-                rgba(255, 252, 240, 0.95) 0%,
-                rgba(255, 243, 206, 0.62) 34%,
-                rgba(252, 221, 146, 0.28) 62%,
-                rgba(245, 198, 102, 0) 100%);
-        }
-
-        /* ---- OPEN INVITE: the tap target, over both leaves ---- */
-        /* A struck maroon-and-gold pill rather than an outline: on the ivory
-           panel a gold-on-cream outline was the quietest thing there, and this is
-           the one thing a guest has to find. The maroon and gold also carry over
-           from the card behind it, so panel and invitation agree. */
-        .cd-open {
-            position: absolute;
-            bottom: 96px;
-            left: 50%;
-            transform: translateX(-50%);
-            z-index: 5;
-            display: inline-flex;
-            align-items: center;
-            gap: 13px;
-            padding: 14px 30px;
-            /* Absolutely positioned from left: 50%, so shrink-to-fit caps the box at
-               half the panel and the label broke onto two lines. max-content sizes
-               it to the words instead. */
-            width: max-content;
-            max-width: calc(100% - 48px);
-            white-space: nowrap;
-            background: linear-gradient(180deg, #93302b 0%, #7d2420 52%, #641a18 100%);
-            border: 1px solid rgba(216, 172, 74, 0.85);
-            border-radius: 50px;
-            color: #f8e7bd;
-            font-family: 'Cinzel', serif;
-            font-size: 12.5px;
-            font-weight: 700;
-            letter-spacing: 4.2px;
-            text-indent: 4.2px;
-            cursor: pointer;
-            overflow: hidden;
-            box-shadow: 0 7px 20px rgba(120, 62, 40, 0.34),
-                        inset 0 1px 0 rgba(255, 232, 176, 0.35),
-                        inset 0 -2px 6px rgba(60, 14, 12, 0.4);
-            transition: transform 0.3s ease, box-shadow 0.3s ease,
-                        filter 0.3s ease, opacity 0.5s ease;
-            animation: cdOpenPulse 3s ease-in-out infinite;
-            -webkit-tap-highlight-color: transparent;
-        }
-
-        /* A gold bead either side of the words */
-        .cd-open-gem {
-            width: 5px;
-            height: 5px;
-            flex-shrink: 0;
-            transform: rotate(45deg);
-            background: linear-gradient(135deg, #ffeeb8, #cf9f38);
-            box-shadow: 0 0 6px rgba(240, 200, 110, 0.6);
-        }
-
-        /* Gold catching the rim, once every few seconds */
-        .cd-open::after {
-            content: '';
-            position: absolute;
-            inset: 0;
-            pointer-events: none;
-            background: linear-gradient(105deg,
-                transparent 34%,
-                rgba(255, 240, 190, 0.34) 50%,
-                transparent 66%);
-            background-size: 260% 100%;
-            background-position: 130% 0;
-            animation: cdOpenSheen 5s ease-in-out 1.4s infinite;
-        }
-
-        @keyframes cdOpenSheen {
-            0%   { background-position: 130% 0; }
-            34%  { background-position: -30% 0; }
-            100% { background-position: -30% 0; }
-        }
-
-        @keyframes cdOpenPulse {
-            0%, 100% {
-                box-shadow: 0 7px 20px rgba(120, 62, 40, 0.34),
-                            inset 0 1px 0 rgba(255, 232, 176, 0.35),
-                            inset 0 -2px 6px rgba(60, 14, 12, 0.4);
-            }
-            50% {
-                box-shadow: 0 7px 22px rgba(120, 62, 40, 0.38),
-                            0 0 24px rgba(216, 172, 74, 0.45),
-                            inset 0 1px 0 rgba(255, 232, 176, 0.45),
-                            inset 0 -2px 6px rgba(60, 14, 12, 0.4);
-            }
-        }
-
-        .cd-open:hover {
-            filter: brightness(1.1);
-            transform: translateX(-50%) translateY(-2px);
-        }
-
-        .cd-open:active { transform: translateX(-50%) scale(0.96); }
-
-        /* ============================================================
-           OPENING THE COVER
-
-           Beats, from the tap:
-             0.00  the button lets go; the leaves start apart and start thinning
-             0.05  warm light gathers in the crease; the crease shadow lets go
-             0.30  the veil of light is up; the crease shadow is nearly gone
-             0.48  the leaves are at 67%, still clearly parting
-             0.90  the letter starts resolving over them (JS) — leaves at 24%
-             1.27  the leaves are down to 5%
-             1.40  the veil of light begins handing over to the letter
-             1.90  the camera has finished pushing through
-             2.30  the veil is gone; the letter stands on its own
-             7.60  hand off to the site (JS)
-
-           WHAT THIS SEQUENCE GOT WRONG, so it doesn't come back: captured frame
-           by frame (animation clock AND the JS timeline both slowed 8x, or the
-           two drift apart and the composite you photograph never actually
-           happens), the cover went bright -> near black -> bright. The panel is
-           ivory and the invitation behind it is deep maroon, so the crease opened
-           onto darkness and two heavy black bars ran down the middle for a full
-           second. On top of that the leaves held near-full opacity until about
-           1.0s and then collapsed, which is a late cut, not a dissolve.
-
-           Three fixes, all of them structural rather than cosmetic:
-             - .cd-veil, a plate of the panel's own light BEHIND the leaves, so
-               they part onto and dissolve into ivory. It, not the panel, is what
-               hands over to the maroon.
-             - the crease shadow fades out over the first half second: a shadow
-               needs a surface near it, and by then there isn't one.
-             - the opacity curve was ease-in (hold, then drop). Now it thins from
-               the first frame and evenly — measured off the live page: 85% at
-               0.30s, 67% at 0.48s, 47% at 0.66s, 24% at 0.90s, 5% at 1.27s, zero
-               at 1.55s, all while the leaves are still swinging inward.
-
-           Deliberately NOT here: an animated blur on the leaves to defocus them
-           as they pass the camera. It looks right on a desktop and re-renders two
-           full-viewport layers every frame on a phone, and a dropped frame costs
-           more smoothness than the defocus buys. Transform and opacity only.
-           ============================================================ */
-        .cover-overlay.opening .cd-leaf.left {
-            transform: translateX(-15%) rotateY(15deg);
-            opacity: 0;
-        }
-
-        .cover-overlay.opening .cd-leaf.right {
-            transform: translateX(15%) rotateY(-15deg);
-            opacity: 0;
-        }
-
-        .cover-overlay.opening .cd-veil { opacity: 1; }
-        .cover-overlay.opening .cd-edge { opacity: 0; }
-
-        .cover-overlay.opening .cd-seam {
-            animation: cdSeamFlare 1.5s ease-out forwards;
-        }
-
-        @keyframes cdSeamFlare {
-            0%   { opacity: 0.7; width: 1px; }
-            30%  { opacity: 0.9; width: 3px; }
-            100% { opacity: 0;   width: 7px; }
-        }
-
-        /* A warm wash in the widening gap rather than a beam out of it. The clip
-           brightens between the leaves; it never flares. It sits above the leaves,
-           so the light spills onto their inner edges as well as filling the crease
-           — which is the other half of what replaced the crease shadow. Starts
-           almost at once now: it used to wait 0.15s and open from 6% of its width,
-           by which time the gap had already shown what was behind it. */
-        .cover-overlay.opening .cd-glow {
-            animation: cdGlow 1.8s ease-out 0.04s forwards;
-        }
-
-        @keyframes cdGlow {
-            0%   { opacity: 0;    transform: translateX(-50%) scaleX(0.1); }
-            22%  { opacity: 0.52; transform: translateX(-50%) scaleX(0.34); }
-            60%  { opacity: 0.6;  transform: translateX(-50%) scaleX(0.86); }
-            100% { opacity: 0;    transform: translateX(-50%) scaleX(1.5); }
-        }
-
-        .cover-overlay.opening .cd-open {
-            opacity: 0;
-            pointer-events: none;
-            animation: none;
-            transition: opacity 0.35s ease;
-        }
-
-        .cover-overlay.opening .env-quiet {
-            opacity: 0;
-            pointer-events: none;
-        }
-
-        /* Reduced motion / low-end: the leaves still part, but without the 3D
-           swing, the seam flare or the glow — the same off-switch the rest of
-           the cover decoration uses. */
-        .no-immersion .cd-glow,
-        .no-immersion .cd-seam { display: none; }
-
-        .no-immersion .cover-overlay.opening .cd-leaf.left  { transform: translateX(-15%); }
-        .no-immersion .cover-overlay.opening .cd-leaf.right { transform: translateX(15%); }
-        /* No camera push either: it is the one part of the dissolve that is purely
-           a 3D flourish. The leaves still part and fade. */
-        .no-immersion .cover-overlay.opening .cover-doors { transform: translateX(-50%); }
-        .no-immersion .cd-open { animation: none; }
-        .no-immersion .cd-open::after { animation: none; opacity: 0; }
-
-        @media (max-width: 400px) {
-            .cd-cartouche { width: min(210px, 56%); }
-            .cd-cartouche-text { font-size: 11px; letter-spacing: 4px; text-indent: 2px; }
-            .cd-open { font-size: 11px; letter-spacing: 3px; padding: 12px 26px; }
-            .cd-couple { height: 54%; }
-        }
-
-        /* Short screens: the two buttons at the foot were overlapping by a few
-           pixels here — .env-quiet sits at 52px and OPEN INVITE was dropped to
-           82px, which is less than its own height. */
-        @media (max-height: 700px) {
-            /* 52% put the plate's pale top under the cartouche on a 640px-tall
-               screen, which is the contrast problem the px bottom exists to avoid. */
-            .cd-couple { height: 47%; }
-            .cd-open { bottom: 96px; }
-            .env-quiet { bottom: 44px; }
-        }
-
-        /* ============================================================
-           THE COVER'S EMBROIDERY
-
-           The vocabulary the cover panel is dressed in — embossed sprigs, a gold
-           buti field over them, a zari border with keri corners, the lotus spray
-           and rule that bracket YOU ARE INVITED. It is the same language as the
-           letter inside, so opening the cover reads as unfolding one piece of
-           cloth rather than cutting to a different design. None of it animates.
-           ============================================================ */
 
         /* ---- Blind-embossed leafy sprigs, the envelope's whole surface pattern.
            Two tiles at different sizes and offsets so the field never reads as a
@@ -1711,11 +1280,16 @@
             inset: 0;
             pointer-events: none;
             background-image:
-                url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' width='104' height='104' viewBox='0 0 104 104'%3E%3Cdefs%3E%3Cpath id='s' d='M0 0 C4 -7 7 -15 6 -24M1.5 -5 C6 -6.5 8.2 -10 7.6 -13.2 C3.6 -12 1.9 -8.4 1.5 -5ZM1 -6.4 C-4 -8.4 -6.2 -12 -5.6 -15.2 C-1.6 -13.6 0.5 -9.8 1 -6.4ZM3.6 -12.4 C8.2 -14 10.2 -17.4 9.6 -20.4 C5.6 -19 4 -15.6 3.6 -12.4ZM3 -14.6 C-2 -16.6 -4.2 -20.2 -3.6 -23.2 C0.4 -21.4 2.5 -17.8 3 -14.6ZM6 -24 C4 -27.8 5 -31 6.6 -33 C8.6 -31 8.2 -27 6 -24Z'/%3E%3Cpath id='f' d='M0 -4.4 C2.6 -1.8 2.6 1.8 0 4.4 C-2.6 1.8 -2.6 -1.8 0 -4.4ZM-4.4 0 C-1.8 -2.6 1.8 -2.6 4.4 0 C1.8 2.6 -1.8 2.6 -4.4 0Z'/%3E%3Cg id='v'%3E%3Cuse href='%23s' transform='translate(16 40) rotate(-12) scale(1)'/%3E%3Cuse href='%23s' transform='translate(62 30) rotate(24) scale(0.9)'/%3E%3Cuse href='%23f' transform='translate(44 62) rotate(0) scale(1)'/%3E%3Cuse href='%23s' transform='translate(84 82) rotate(-34) scale(0.85)'/%3E%3Cuse href='%23s' transform='translate(34 92) rotate(14) scale(0.8)'/%3E%3Cuse href='%23f' transform='translate(88 14) rotate(0) scale(0.8)'/%3E%3C/g%3E%3C/defs%3E%3Cg fill='none' stroke-linecap='round' stroke-linejoin='round' stroke-width='1'%3E%3Cuse href='%23v' stroke='%23c9a488' stroke-opacity='0.5' y='0.9'/%3E%3Cuse href='%23v' stroke='%23fffdf6' stroke-opacity='0.75'/%3E%3C/g%3E%3C/svg%3E"),
-                url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' width='146' height='146' viewBox='0 0 146 146'%3E%3Cdefs%3E%3Cpath id='s' d='M0 0 C4 -7 7 -15 6 -24M1.5 -5 C6 -6.5 8.2 -10 7.6 -13.2 C3.6 -12 1.9 -8.4 1.5 -5ZM1 -6.4 C-4 -8.4 -6.2 -12 -5.6 -15.2 C-1.6 -13.6 0.5 -9.8 1 -6.4ZM3.6 -12.4 C8.2 -14 10.2 -17.4 9.6 -20.4 C5.6 -19 4 -15.6 3.6 -12.4ZM3 -14.6 C-2 -16.6 -4.2 -20.2 -3.6 -23.2 C0.4 -21.4 2.5 -17.8 3 -14.6ZM6 -24 C4 -27.8 5 -31 6.6 -33 C8.6 -31 8.2 -27 6 -24Z'/%3E%3Cpath id='f' d='M0 -4.4 C2.6 -1.8 2.6 1.8 0 4.4 C-2.6 1.8 -2.6 -1.8 0 -4.4ZM-4.4 0 C-1.8 -2.6 1.8 -2.6 4.4 0 C1.8 2.6 -1.8 2.6 -4.4 0Z'/%3E%3Cg id='v'%3E%3Cuse href='%23s' transform='translate(28 118) rotate(38) scale(0.95)'/%3E%3Cuse href='%23f' transform='translate(104 46) rotate(0) scale(0.9)'/%3E%3Cuse href='%23s' transform='translate(118 108) rotate(-22) scale(0.85)'/%3E%3Cuse href='%23s' transform='translate(70 66) rotate(-58) scale(0.75)'/%3E%3Cuse href='%23f' transform='translate(22 34) rotate(0) scale(0.75)'/%3E%3C/g%3E%3C/defs%3E%3Cg fill='none' stroke-linecap='round' stroke-linejoin='round' stroke-width='0.95'%3E%3Cuse href='%23v' stroke='%23c9a488' stroke-opacity='0.4' y='0.9'/%3E%3Cuse href='%23v' stroke='%23fffdf6' stroke-opacity='0.6'/%3E%3C/g%3E%3C/svg%3E");
+                url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='104' height='104' viewBox='0 0 104 104'%3E%3Cdefs%3E%3Cpath id='s' d='M0 0 C4 -7 7 -15 6 -24M1.5 -5 C6 -6.5 8.2 -10 7.6 -13.2 C3.6 -12 1.9 -8.4 1.5 -5ZM1 -6.4 C-4 -8.4 -6.2 -12 -5.6 -15.2 C-1.6 -13.6 0.5 -9.8 1 -6.4ZM3.6 -12.4 C8.2 -14 10.2 -17.4 9.6 -20.4 C5.6 -19 4 -15.6 3.6 -12.4ZM3 -14.6 C-2 -16.6 -4.2 -20.2 -3.6 -23.2 C0.4 -21.4 2.5 -17.8 3 -14.6ZM6 -24 C4 -27.8 5 -31 6.6 -33 C8.6 -31 8.2 -27 6 -24Z'/%3E%3Cpath id='f' d='M0 -4.4 C2.6 -1.8 2.6 1.8 0 4.4 C-2.6 1.8 -2.6 -1.8 0 -4.4ZM-4.4 0 C-1.8 -2.6 1.8 -2.6 4.4 0 C1.8 2.6 -1.8 2.6 -4.4 0Z'/%3E%3Cg id='v'%3E%3Cuse href='%23s' transform='translate(16 40) rotate(-12) scale(1)'/%3E%3Cuse href='%23s' transform='translate(62 30) rotate(24) scale(0.9)'/%3E%3Cuse href='%23f' transform='translate(44 62) rotate(0) scale(1)'/%3E%3Cuse href='%23s' transform='translate(84 82) rotate(-34) scale(0.85)'/%3E%3Cuse href='%23s' transform='translate(34 92) rotate(14) scale(0.8)'/%3E%3Cuse href='%23f' transform='translate(88 14) rotate(0) scale(0.8)'/%3E%3C/g%3E%3C/defs%3E%3Cg fill='none' stroke-linecap='round' stroke-linejoin='round' stroke-width='0.95'%3E%3Cuse href='%23v' stroke='%23140404' stroke-opacity='0.42' y='0.8'/%3E%3Cuse href='%23v' stroke='%23cf7f74' stroke-opacity='0.30'/%3E%3C/g%3E%3C/svg%3E"),
+                url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='146' height='146' viewBox='0 0 146 146'%3E%3Cdefs%3E%3Cpath id='s' d='M0 0 C4 -7 7 -15 6 -24M1.5 -5 C6 -6.5 8.2 -10 7.6 -13.2 C3.6 -12 1.9 -8.4 1.5 -5ZM1 -6.4 C-4 -8.4 -6.2 -12 -5.6 -15.2 C-1.6 -13.6 0.5 -9.8 1 -6.4ZM3.6 -12.4 C8.2 -14 10.2 -17.4 9.6 -20.4 C5.6 -19 4 -15.6 3.6 -12.4ZM3 -14.6 C-2 -16.6 -4.2 -20.2 -3.6 -23.2 C0.4 -21.4 2.5 -17.8 3 -14.6ZM6 -24 C4 -27.8 5 -31 6.6 -33 C8.6 -31 8.2 -27 6 -24Z'/%3E%3Cpath id='f' d='M0 -4.4 C2.6 -1.8 2.6 1.8 0 4.4 C-2.6 1.8 -2.6 -1.8 0 -4.4ZM-4.4 0 C-1.8 -2.6 1.8 -2.6 4.4 0 C1.8 2.6 -1.8 2.6 -4.4 0Z'/%3E%3Cg id='v'%3E%3Cuse href='%23s' transform='translate(28 118) rotate(38) scale(0.95)'/%3E%3Cuse href='%23f' transform='translate(104 46) rotate(0) scale(0.9)'/%3E%3Cuse href='%23s' transform='translate(118 108) rotate(-22) scale(0.85)'/%3E%3Cuse href='%23s' transform='translate(70 66) rotate(-58) scale(0.75)'/%3E%3Cuse href='%23f' transform='translate(22 34) rotate(0) scale(0.75)'/%3E%3C/g%3E%3C/defs%3E%3Cg fill='none' stroke-linecap='round' stroke-linejoin='round' stroke-width='0.9'%3E%3Cuse href='%23v' stroke='%23140404' stroke-opacity='0.34' y='0.8'/%3E%3Cuse href='%23v' stroke='%23cf7f74' stroke-opacity='0.24'/%3E%3C/g%3E%3C/svg%3E");
             background-size: 104px 104px, 146px 146px;
             background-position: 0 0, 37px 23px;
         }
+
+        /* The sheet's own copies, seen in the band above the flap once it lifts */
+        .envelope > .env-emboss { z-index: 0; opacity: 0.85; }
+        .envelope > .env-buti   { z-index: 0; opacity: 0.34; }
+
         /* ---- Buti field: gold thread over the blind emboss ----
            The same scattered motifs the letter's ground carries, at about
            two-thirds the strength. The emboss alone is all relief and no metal,
@@ -1729,13 +1303,13 @@
             pointer-events: none;
             opacity: 0.44;
             background-image:
-                url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' width='104' height='104' viewBox='0 0 104 104'%3E%3Cdefs%3E%3Cpath id='s' d='M0 0 C4 -7 7 -15 6 -24M1.5 -5 C6 -6.5 8.2 -10 7.6 -13.2 C3.6 -12 1.9 -8.4 1.5 -5ZM1 -6.4 C-4 -8.4 -6.2 -12 -5.6 -15.2 C-1.6 -13.6 0.5 -9.8 1 -6.4ZM3.6 -12.4 C8.2 -14 10.2 -17.4 9.6 -20.4 C5.6 -19 4 -15.6 3.6 -12.4ZM3 -14.6 C-2 -16.6 -4.2 -20.2 -3.6 -23.2 C0.4 -21.4 2.5 -17.8 3 -14.6ZM6 -24 C4 -27.8 5 -31 6.6 -33 C8.6 -31 8.2 -27 6 -24Z'/%3E%3Cpath id='f' d='M0 -4.4 C2.6 -1.8 2.6 1.8 0 4.4 C-2.6 1.8 -2.6 -1.8 0 -4.4ZM-4.4 0 C-1.8 -2.6 1.8 -2.6 4.4 0 C1.8 2.6 -1.8 2.6 -4.4 0Z'/%3E%3Cg id='v'%3E%3Cuse href='%23s' transform='translate(16 40) rotate(-12) scale(1)'/%3E%3Cuse href='%23s' transform='translate(62 30) rotate(24) scale(0.9)'/%3E%3Cuse href='%23f' transform='translate(44 62) rotate(0) scale(1)'/%3E%3Cuse href='%23s' transform='translate(84 82) rotate(-34) scale(0.85)'/%3E%3Cuse href='%23s' transform='translate(34 92) rotate(14) scale(0.8)'/%3E%3Cuse href='%23f' transform='translate(88 14) rotate(0) scale(0.8)'/%3E%3C/g%3E%3C/defs%3E%3Cg fill='none' stroke-linecap='round' stroke-linejoin='round' stroke-width='0.9' stroke='%23a8792a' stroke-opacity='0.34'%3E%3Cuse href='%23v'/%3E%3C/g%3E%3C/svg%3E"),
-                url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' width='149' height='149' viewBox='0 0 149 149'%3E%3Cdefs%3E%3Cpath id='s' d='M0 0 C4 -7 7 -15 6 -24M1.5 -5 C6 -6.5 8.2 -10 7.6 -13.2 C3.6 -12 1.9 -8.4 1.5 -5ZM1 -6.4 C-4 -8.4 -6.2 -12 -5.6 -15.2 C-1.6 -13.6 0.5 -9.8 1 -6.4ZM3.6 -12.4 C8.2 -14 10.2 -17.4 9.6 -20.4 C5.6 -19 4 -15.6 3.6 -12.4ZM3 -14.6 C-2 -16.6 -4.2 -20.2 -3.6 -23.2 C0.4 -21.4 2.5 -17.8 3 -14.6ZM6 -24 C4 -27.8 5 -31 6.6 -33 C8.6 -31 8.2 -27 6 -24Z'/%3E%3Cpath id='f' d='M0 -4.4 C2.6 -1.8 2.6 1.8 0 4.4 C-2.6 1.8 -2.6 -1.8 0 -4.4ZM-4.4 0 C-1.8 -2.6 1.8 -2.6 4.4 0 C1.8 2.6 -1.8 2.6 -4.4 0Z'/%3E%3Cg id='v'%3E%3Cuse href='%23s' transform='translate(28 118) rotate(38) scale(0.95)'/%3E%3Cuse href='%23f' transform='translate(104 46) rotate(0) scale(0.9)'/%3E%3Cuse href='%23s' transform='translate(118 108) rotate(-22) scale(0.85)'/%3E%3Cuse href='%23s' transform='translate(70 66) rotate(-58) scale(0.75)'/%3E%3Cuse href='%23f' transform='translate(22 34) rotate(0) scale(0.75)'/%3E%3C/g%3E%3C/defs%3E%3Cg fill='none' stroke-linecap='round' stroke-linejoin='round' stroke-width='0.85' stroke='%23a8792a' stroke-opacity='0.28'%3E%3Cuse href='%23v'/%3E%3C/g%3E%3C/svg%3E");
+                url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='104' height='104' viewBox='0 0 104 104'%3E%3Cg fill='none' stroke='%23d4a734' stroke-opacity='0.34' stroke-width='0.9' stroke-linecap='round'%3E%3Cg transform='translate(22 20)'%3E%3Cpath d='M0 -5.5 C3.2 -2.2 3.2 2.2 0 5.5 C-3.2 2.2 -3.2 -2.2 0 -5.5Z'/%3E%3Cpath d='M-5.5 0 C-2.2 -3.2 2.2 -3.2 5.5 0 C2.2 3.2 -2.2 3.2 -5.5 0Z'/%3E%3Ccircle cx='0' cy='0' r='1.2' fill='%23e8c860' fill-opacity='0.5' stroke='none'/%3E%3C/g%3E%3Cg transform='translate(74 46) rotate(24)'%3E%3Cpath d='M0 7 C-6.5 2.5 -6.5 -6 0 -8.5 C5.5 -6.5 5.5 0.5 1 3.5'/%3E%3Cpath d='M0 3.5 C-3 1.5 -3 -2.5 0 -4' stroke-opacity='0.22'/%3E%3C/g%3E%3Cg transform='translate(44 80)'%3E%3Cpath d='M0 7 L0 -6'/%3E%3Cpath d='M0 -1.5 Q4.5 -3.5 5.5 -8 Q1 -7 0 -1.5Z'/%3E%3Cpath d='M0 2.5 Q-4.5 0.5 -5.5 -4 Q-1 -3 0 2.5Z'/%3E%3Ccircle cx='0' cy='-6' r='1' fill='%23e8c860' fill-opacity='0.45' stroke='none'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E"),
+                url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='149' height='149' viewBox='0 0 149 149'%3E%3Cg fill='none' stroke='%23d4a734' stroke-opacity='0.3' stroke-width='0.85' stroke-linecap='round'%3E%3Cg transform='translate(38 96) rotate(-18)'%3E%3Cpath d='M0 6.5 C-6 2 -6 -6 0 -8 C5 -6 5 0 1 3'/%3E%3Ccircle cx='0' cy='0' r='0.9' fill='%23e8c860' fill-opacity='0.45' stroke='none'/%3E%3C/g%3E%3Cg transform='translate(110 34) rotate(12)'%3E%3Cpath d='M0 -5 C2.9 -2 2.9 2 0 5 C-2.9 2 -2.9 -2 0 -5Z'/%3E%3Cpath d='M-5 0 C-2 -2.9 2 -2.9 5 0 C2 2.9 -2 2.9 -5 0Z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
             background-size: 104px 104px, 149px 149px;
-            /* Raised thread: one hard pixel of warm shade under the gold. Tan,
-               not near-black — the panel is ivory now. */
-            filter: drop-shadow(0 1px 0 rgba(186, 148, 116, 0.65));
+            /* Raised thread: one hard pixel of dark under the gold */
+            filter: drop-shadow(0 1px 0 rgba(40, 12, 6, 0.55));
         }
+
         /* ---- Zari border ----
            A double gold rule set 18px in from the sheet's edge, with a run of
            satin ticks and a mirror sequin between the two. Drawn INSIDE both
@@ -1747,17 +1321,19 @@
             position: absolute;
             inset: 18px;
             pointer-events: none;
-            border: 1px solid rgba(176, 128, 52, 0.55);
+            border: 1px solid rgba(201, 160, 48, 0.4);
             border-radius: 2px;
-            filter: drop-shadow(0 1px 0 rgba(255, 253, 246, 0.7));
+            filter: drop-shadow(0 1px 0 rgba(40, 12, 6, 0.55));
         }
+
         .env-zari::before {
             content: '';
             position: absolute;
             inset: 5px;
-            border: 1px solid rgba(176, 128, 52, 0.24);
+            border: 1px solid rgba(201, 160, 48, 0.17);
             border-radius: 1px;
         }
+
         /* Satin ticks with a sequin every other repeat, in the channel between
            the two rules. Horizontal runs top and bottom, vertical down the
            sides, so the border stays continuous through the corners. */
@@ -1778,24 +1354,342 @@
                 6px 0, 6px 100%, 0 6px, 100% 6px, 13px 0.4px, 13px calc(100% - 0.4px);
             background-repeat: repeat-x, repeat-x, repeat-y, repeat-y, repeat-x, repeat-x;
         }
+
+        /* ---- The inside of the envelope ----
+           A mouth rather than a triangle: it peaks near the top where the flap
+           was folded back, spreads to the full width of the sheet, and closes at
+           the point of the bottom flap. Hidden under the flap and the pocket
+           while the envelope is shut, so it needs no reveal of its own — the
+           flap moving is the reveal. ---- */
+        .env-inside {
+            position: absolute;
+            inset: 0;
+            z-index: 1;
+            clip-path: polygon(
+                0 var(--env-inside-shoulder),
+                50% var(--env-inside-peak),
+                100% var(--env-inside-shoulder),
+                100% var(--env-shoulder),
+                50% var(--env-vee),
+                0 var(--env-shoulder));
+            background:
+                /* a little light caught on the lining at the top of the mouth */
+                radial-gradient(ellipse 70% 40% at 50% 8%,
+                    rgba(120, 48, 40, 0.55) 0%, rgba(120, 48, 40, 0) 70%),
+                /* and the cavity darkening down toward the point */
+                radial-gradient(ellipse 130% 80% at 50% 100%,
+                    rgba(0, 0, 0, 0.6) 0%, rgba(0, 0, 0, 0.2) 46%, rgba(0, 0, 0, 0) 76%),
+                linear-gradient(180deg, #3a1412 0%, #200a09 52%, #150606 100%);
+        }
+
+        /* ---- The mouth lighting up ----
+           Clipped by .env-inside, so it can only ever glow inside the cavity:
+           the light reads as escaping an envelope rather than as a lamp behind
+           one. Comes up as the flap breaks contact and hands over to the burst.
+           ---- */
+        .env-mouth-light {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            opacity: 0;
+            mix-blend-mode: screen;
+            /* Sized to the MOUTH, not to the envelope: this element is inset: 0
+               and only clipped to the cavity, so a gradient measured in percent
+               of its own box floods the whole opening and the inside of the
+               envelope comes out pale instead of deep. A shallow ellipse low in
+               the mouth is what a lit cavity looks like — the light pools at the
+               bottom of it and the top stays dark. */
+            background:
+                radial-gradient(ellipse 46% 13% at 50% 51%,
+                    rgba(255, 252, 240, 0.95) 0%,
+                    rgba(255, 243, 206, 0.7) 30%,
+                    rgba(252, 221, 146, 0.34) 58%,
+                    rgba(245, 198, 102, 0.1) 82%,
+                    rgba(240, 190, 90, 0) 100%);
+        }
+
+        /* ---- The bottom flap, folded up: everything below the V ----
+           Its background is the gilt fold; .env-pocket-face covers all but a
+           hairline of it, so the fold shows as a fine gold line along the whole
+           V — the lower line of the double run, with the flap's own rule just
+           above it. ---- */
+        .env-pocket {
+            position: absolute;
+            inset: 0;
+            z-index: 2;
+            clip-path: polygon(
+                0 var(--env-shoulder),
+                50% var(--env-vee),
+                100% var(--env-shoulder),
+                100% 100%, 0 100%);
+            background: linear-gradient(180deg,
+                rgba(214, 172, 74, 0.62), rgba(150, 100, 30, 0.5) 40%, rgba(120, 78, 22, 0.3));
+        }
+
+        .env-pocket-face {
+            position: absolute;
+            inset: 0;
+            clip-path: polygon(
+                0 calc(var(--env-shoulder) + var(--env-rim)),
+                50% calc(var(--env-vee) + var(--env-rim)),
+                100% calc(var(--env-shoulder) + var(--env-rim)),
+                100% 100%, 0 100%);
+        }
+
+        /* The pocket's stock, on both of its paper layers — the channel between
+           the gilt rule and the bead run, and the field inside them. */
+        .env-pocket-face,
+        .env-pocket-bead-face {
+            background:
+                /* the fold catches a little light along its top edge */
+                linear-gradient(180deg,
+                    rgba(255, 214, 160, 0.07) 0 2px, rgba(255, 214, 160, 0) 26%),
+                /* jaali: a lattice of gold hairlines under the emboss, close to
+                   the threshold of visible. It should register as cloth, not as
+                   pattern. */
+                repeating-linear-gradient(45deg,
+                    rgba(212, 167, 52, 0.04) 0 1px, transparent 1px 9px),
+                repeating-linear-gradient(-45deg,
+                    rgba(212, 167, 52, 0.04) 0 1px, transparent 1px 9px),
+                repeating-linear-gradient(0deg,
+                    rgba(255, 236, 208, 0.02) 0 1px, rgba(0, 0, 0, 0.028) 1px 3px),
+                linear-gradient(170deg, #48191a 0%, #3b1315 52%, #2e0f10 100%);
+        }
+
+        /* Satin ticks following the pocket's edge, the mirror of the flap's
+           bead run above it: the fold ends up with a gilt rule and a run of
+           beads on each side of it. Same rim-and-face trick — the band of gold
+           left showing between this clip and its face IS the run, and because
+           the gold is a dashed gradient rather than flat it comes out as ticks
+           along the diagonal instead of a solid line. */
+        .env-pocket-bead {
+            position: absolute;
+            inset: 0;
+            clip-path: polygon(
+                0 calc(var(--env-shoulder) + var(--env-rule)),
+                50% calc(var(--env-vee) + var(--env-rule)),
+                100% calc(var(--env-shoulder) + var(--env-rule)),
+                100% 100%, 0 100%);
+            background-image:
+                repeating-linear-gradient(90deg,
+                    rgba(236, 200, 110, 0.75) 0 1.8px, transparent 1.8px 7px);
+        }
+
+        /* No `background: inherit` here — it would pick up the dashed gold above
+           and stripe the entire pocket. The stock is set on both paper layers
+           together, further up. */
+        .env-pocket-bead-face {
+            position: absolute;
+            inset: 0;
+            clip-path: polygon(
+                0 calc(var(--env-shoulder) + var(--env-rule-in)),
+                50% calc(var(--env-vee) + var(--env-rule-in)),
+                100% calc(var(--env-shoulder) + var(--env-rule-in)),
+                100% 100%, 0 100%);
+        }
+
+        .env-pocket-bead-face .env-emboss { background-position: 21px 63px, 88px 11px; }
+        .env-pocket-bead-face .env-buti   { background-position: 12px 41px, 64px 8px; }
+
+        /* Contact shadow the closed flap throws down the pocket. The flap's own
+           silhouette in flat dark, nudged down a few pixels and blurred: the flap
+           itself covers all of it but the sliver that spills past the V, which is
+           exactly what a contact shadow is. Drawn with a vertical gradient
+           instead, it pools at the point of the V and stays too pale at the
+           shoulders — there is no way to run a gradient along a bent edge. */
+        .env-flap-shadow {
+            position: absolute;
+            inset: 0;
+            z-index: 3;
+            pointer-events: none;
+            clip-path: polygon(
+                0 0, 100% 0,
+                100% var(--env-shoulder),
+                50% var(--env-vee),
+                0 var(--env-shoulder));
+            background: rgba(0, 0, 0, 0.5);
+            transform: translateY(5px);
+            filter: blur(5px);
+            /* Quick: a contact shadow has no business lingering once the two
+               surfaces are no longer touching. */
+            transition: opacity 0.22s ease;
+        }
+
+        /* ---- The top flap ----
+           The whole hinged assembly: the paper, and the seal struck on its
+           point. It carries no clip of its own — the paper inside it does — so
+           the seal can sit astride the V without being cut in half by it. ---- */
+        .env-flap {
+            position: absolute;
+            inset: 0;
+            z-index: 4;
+            transform-origin: 50% 0;
+            /* Weighted lift: slow to break contact, then away. */
+            transition: transform 1.15s cubic-bezier(0.44, 0.02, 0.24, 1) 0.12s;
+            will-change: transform;
+        }
+
+        /* Gilt fold, with the face inset over all but a hairline of it */
+        .env-flap-paper {
+            position: absolute;
+            inset: 0;
+            clip-path: polygon(
+                0 0, 100% 0,
+                100% var(--env-shoulder),
+                50% var(--env-vee),
+                0 var(--env-shoulder));
+            background: linear-gradient(180deg,
+                rgba(224, 182, 84, 0.5) 40%, rgba(232, 190, 92, 0.85) 100%);
+            filter: drop-shadow(0 2px 3px rgba(0, 0, 0, 0.5))
+                    drop-shadow(0 12px 22px rgba(0, 0, 0, 0.45));
+        }
+
+        /* A clear step lighter than the sheet below it the whole way down, so
+           there is a tonal edge along the fold wherever you look at it. Two
+           panels of paper at the same value read as one sheet with a V drawn
+           on it. */
+        .env-flap-face {
+            position: absolute;
+            inset: 0;
+            clip-path: polygon(
+                0 0, 100% 0,
+                100% calc(var(--env-shoulder) - var(--env-rim)),
+                50% calc(var(--env-vee) - var(--env-rim)),
+                0 calc(var(--env-shoulder) - var(--env-rim)));
+        }
+
+        /* The flap's stock. Set on both paper layers of the flap — the band
+           between the two gilt rules and the field inside them are the same
+           sheet, they just have a rule drawn between them. */
+        .env-flap-face,
+        .env-flap-rule-face,
+        .env-flap-bead-face {
+            background:
+                radial-gradient(ellipse 92% 74% at 50% 0%,
+                    rgba(255, 214, 160, 0.1) 0%, rgba(255, 214, 160, 0) 72%),
+                /* jaali, as on the pocket */
+                repeating-linear-gradient(45deg,
+                    rgba(212, 167, 52, 0.042) 0 1px, transparent 1px 9px),
+                repeating-linear-gradient(-45deg,
+                    rgba(212, 167, 52, 0.042) 0 1px, transparent 1px 9px),
+                repeating-linear-gradient(0deg,
+                    rgba(255, 236, 208, 0.022) 0 1px, rgba(0, 0, 0, 0.026) 1px 3px),
+                linear-gradient(174deg, #62231f 0%, #55201d 46%, #481a19 100%);
+        }
+
+        /* The second rule of the double run: a gilt hairline set in from the fold
+           and following it, with the embossed paper resuming inside that. Same
+           rim-and-face trick as the fold itself, one layer deeper. The reference
+           card's flap carries two parallel gold lines down each side of the V,
+           and one line on its own reads as a printed edge rather than as a
+           bordered flap. */
+        .env-flap-rule {
+            position: absolute;
+            inset: 0;
+            clip-path: polygon(
+                0 0, 100% 0,
+                100% calc(var(--env-shoulder) - var(--env-rule)),
+                50% calc(var(--env-vee) - var(--env-rule)),
+                0 calc(var(--env-shoulder) - var(--env-rule)));
+            background: linear-gradient(180deg,
+                rgba(212, 167, 52, 0.34) 40%, rgba(226, 184, 88, 0.62) 100%);
+        }
+
+        .env-flap-rule-face {
+            position: absolute;
+            inset: 0;
+            clip-path: polygon(
+                0 0, 100% 0,
+                100% calc(var(--env-shoulder) - var(--env-rule-in)),
+                50% calc(var(--env-vee) - var(--env-rule-in)),
+                0 calc(var(--env-shoulder) - var(--env-rule-in)));
+        }
+
+        /* Satin ticks inside the second rule, mirroring the pocket's run below
+           the fold. Dashed gold rather than flat, so the band comes out as
+           ticks following the diagonal. */
+        .env-flap-bead {
+            position: absolute;
+            inset: 0;
+            clip-path: polygon(
+                0 0, 100% 0,
+                100% calc(var(--env-shoulder) - var(--env-bead)),
+                50% calc(var(--env-vee) - var(--env-bead)),
+                0 calc(var(--env-shoulder) - var(--env-bead)));
+            background-image:
+                repeating-linear-gradient(90deg,
+                    rgba(240, 206, 118, 0.8) 0 1.8px, transparent 1.8px 7px);
+        }
+
+        .env-flap-bead-face {
+            position: absolute;
+            inset: 0;
+            clip-path: polygon(
+                0 0, 100% 0,
+                100% calc(var(--env-shoulder) - var(--env-bead-in)),
+                50% calc(var(--env-vee) - var(--env-bead-in)),
+                0 calc(var(--env-shoulder) - var(--env-bead-in)));
+        }
+
+        .env-flap-bead-face .env-emboss { background-position: 53px 0, 6px 71px; }
+        .env-flap-bead-face .env-buti   { background-position: 31px 12px, 96px 62px; }
+
+        /* ---- Set pieces on the flap ----
+           The reference clip's flap is bare apart from its seal; this is the one
+           place the envelope departs from it on purpose. A mehrab crest with a
+           bead swag hung from it down to the wax, and a keri turned into each
+           corner of the zari border, all in the letter's own vocabulary so the
+           outside of the set reads as the same hand as the inside. Percentages,
+           not pixels: every one of these has to stay inside a triangle that
+           narrows as the screen does. ---- */
+        .env-crest {
+            position: absolute;
+            top: 15.5%;
+            left: 50%;
+            width: min(172px, 44%);
+            transform: translateX(-50%);
+            pointer-events: none;
+            color: rgba(226, 182, 74, 0.66);
+            filter: drop-shadow(0 1px 0 rgba(30, 8, 4, 0.7));
+        }
+
+        .env-crest svg { width: 100%; height: auto; display: block; }
+
+        /* Hangs from the crest's bottom bead to the top of the seal. Top and
+           height in percent of the envelope so it keeps meeting both at every
+           size; the width follows from the height through aspect-ratio, or the
+           beads on it would come out as ellipses. */
+        .env-pendant {
+            position: absolute;
+            top: 30.5%;
+            height: 16.5%;
+            aspect-ratio: 14 / 100;
+            left: 50%;
+            transform: translateX(-50%);
+            pointer-events: none;
+            color: rgba(226, 182, 74, 0.6);
+            filter: drop-shadow(0 1px 0 rgba(30, 8, 4, 0.65));
+        }
+
+        .env-pendant svg { width: 100%; height: 100%; display: block; }
+
         /* Kanguri — the scalloped arch band with a bead in each dip that edges a
            zardozi panel. Below the fold, where the pocket's field would otherwise
            run plain from the seal all the way down to YOU ARE INVITED. Fixed tile
            size with repeat-x so the arches keep their shape at any width. */
-        /* The scallop band, at the head of the panel — the reference clip runs a
-           border of small motifs across the top of its arch. */
         .env-kanguri {
             position: absolute;
-            top: 44px;
+            top: 66%;
             left: 40px;
             right: 40px;
             height: 21px;
             pointer-events: none;
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='21' viewBox='0 0 24 21'%3E%3Cg fill='none' stroke='%23a8792a' stroke-opacity='0.6' stroke-width='1' stroke-linecap='round'%3E%3Cpath d='M0 2 A12 10 0 0 0 24 2'/%3E%3Cpath d='M0 2 A12 5.5 0 0 0 24 2' stroke-opacity='0.24' stroke-dasharray='1.4 2.1'/%3E%3C/g%3E%3Ccircle cx='12' cy='15.5' r='1.4' fill='%23f0d478' fill-opacity='0.55'/%3E%3Ccircle cx='0' cy='2' r='1' fill='%23d4a734' fill-opacity='0.5'/%3E%3C/svg%3E");
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='21' viewBox='0 0 24 21'%3E%3Cg fill='none' stroke='%23d4a734' stroke-opacity='0.5' stroke-width='1' stroke-linecap='round'%3E%3Cpath d='M0 2 A12 10 0 0 0 24 2'/%3E%3Cpath d='M0 2 A12 5.5 0 0 0 24 2' stroke-opacity='0.24' stroke-dasharray='1.4 2.1'/%3E%3C/g%3E%3Ccircle cx='12' cy='15.5' r='1.4' fill='%23f0d478' fill-opacity='0.55'/%3E%3Ccircle cx='0' cy='2' r='1' fill='%23d4a734' fill-opacity='0.5'/%3E%3C/svg%3E");
             background-size: 24px 21px;
             background-repeat: repeat-x;
             filter: drop-shadow(0 1px 0 rgba(40, 12, 6, 0.5));
         }
+
         /* A keri turned into each corner of the zari border — the same motif four
            times, mirrored, so the border reads as one piece of work. The letter's
            bigger .cov-corner was tried in the foot and its lotus fan, upside
@@ -1805,31 +1699,131 @@
             width: 56px;
             height: 56px;
             pointer-events: none;
-            color: rgba(174, 122, 58, 0.6);
-            filter: drop-shadow(0 1px 0 rgba(255, 253, 246, 0.7));
+            color: rgba(232, 190, 88, 0.52);
+            filter: drop-shadow(0 1px 0 rgba(30, 8, 4, 0.6));
         }
+
         .env-border-corner svg { width: 100%; height: 100%; display: block; }
         .env-border-corner.tl { top: 18px;    left: 18px;  }
         .env-border-corner.tr { top: 18px;    right: 18px; transform: scaleX(-1); }
         .env-border-corner.bl { bottom: 18px; left: 18px;  transform: scaleY(-1); }
         .env-border-corner.br { bottom: 18px; right: 18px; transform: scale(-1); }
+
+        /* The crease at the head of the flap, as a fold rather than a drawn
+           line: a lit top face with a shaded roll under it. The head has to look
+           folded and the V has to look cut, or the two stop reading as pieces. */
+        .env-flap-fold {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: linear-gradient(180deg,
+                rgba(255, 244, 206, 0.42) 0 1.5px,
+                rgba(0, 0, 0, 0.3) 1.5px 3.5px,
+                rgba(0, 0, 0, 0) 3.5px 100%);
+            -webkit-mask-image: linear-gradient(90deg,
+                transparent 0%, #000 10%, #000 90%, transparent 100%);
+            mask-image: linear-gradient(90deg,
+                transparent 0%, #000 10%, #000 90%, transparent 100%);
+        }
+
+        /* ---- The wax seal, struck over the point of the flap ----
+           A child of the flap, so it foreshortens and rides up with it when the
+           flap lifts instead of sitting stuck to the screen. .wax-seal itself is
+           styled further up with the rest of the buttons. ---- */
+        .envelope .wax-seal {
+            position: absolute;
+            top: var(--env-seal-y);
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 5;
+            transition: transform 0.24s ease, opacity 0.24s ease;
+        }
+
+        .envelope .wax-seal:hover { transform: translate(-50%, -50%) scale(1.06); }
+        .envelope .wax-seal:active { transform: translate(-50%, -50%) scale(0.94); }
+
+        /* ---- Light from the breaking wax ----
+           On the seal, above the flap, and starting at 20ms. Everything else in
+           the burst lives behind the flap and so cannot appear until the flap has
+           swung far enough to expose it; this lights the moment the wax gives,
+           which is also the physically correct place for it. ---- */
+        .env-crack {
+            position: absolute;
+            top: var(--env-seal-y);
+            left: 50%;
+            width: 300px;
+            height: 300px;
+            margin: -150px 0 0 -150px;
+            pointer-events: none;
+            z-index: 6;
+            opacity: 0;
+            mix-blend-mode: screen;
+            background: radial-gradient(circle closest-side,
+                rgba(255, 253, 244, 0.95) 0%,
+                rgba(255, 240, 198, 0.55) 26%,
+                rgba(252, 214, 130, 0.2) 52%,
+                rgba(248, 196, 96, 0) 78%);
+        }
+
+        .no-immersion .env-crack { display: none; }
+
+        /* ---- YOU ARE INVITED at the foot, between two gold sprays ----
+           Anchored to the bottom, not the top: pinned at 74% it lands on the
+           ENTER QUIETLY button on a short screen (a 640-tall phone put the two
+           in the same 20 pixels). Measured up from the foot it clears the button
+           at every height and still sits at ~75% on a tall phone. ---- */
+        .env-invited-block {
+            position: absolute;
+            bottom: 122px;
+            left: 0;
+            right: 0;
+            z-index: 3;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 13px;
+            padding: 0 24px;
+            pointer-events: none;
+        }
+
+        .env-spray {
+            width: min(215px, 58%);
+            color: rgba(212, 167, 52, 0.6);
+            filter: drop-shadow(0 1px 0 rgba(30, 8, 4, 0.7));
+        }
+
+        .env-spray svg { width: 100%; height: auto; display: block; }
+
+        .env-invited {
+            font-family: 'Cinzel', serif;
+            font-size: 15px;
+            letter-spacing: 6px;
+            color: #d4b96e;
+            text-align: center;
+            text-shadow: 0 1px 0 rgba(30, 8, 4, 0.8);
+        }
+
+        .env-flourish {
+            width: min(210px, 56%);
+            color: rgba(201, 160, 48, 0.72);
+            filter: drop-shadow(0 1px 0 rgba(30, 8, 4, 0.7));
+        }
+
+        .env-flourish svg { width: 100%; height: auto; display: block; }
+        .env-flourish.flip { transform: scaleY(-1); }
+
         .env-quiet {
             position: absolute;
             bottom: 52px;
             left: 50%;
             transform: translateX(-50%);
             padding: 10px 26px;
-            /* Same trap as .cd-open: positioned from left: 50%, so shrink-to-fit
-               capped it at half the panel and the label wrapped to two lines on a
-               360px screen — which pushed it up into OPEN INVITE. */
-            width: max-content;
-            max-width: calc(100% - 48px);
-            white-space: nowrap;
             background: transparent;
-            border: 1px solid rgba(140, 100, 62, 0.6);
+            border: 1px solid rgba(201, 160, 48, 0.45);
             border-radius: 50px;
-            color: #6b4a2a;
-            font-weight: 600;
+            color: #c9a030;
             font-family: 'Cinzel', serif;
             font-size: 11px;
             letter-spacing: 3px;
@@ -1838,18 +1832,122 @@
             transition: background 0.3s ease, opacity 0.4s ease;
             -webkit-tap-highlight-color: transparent;
         }
-        .env-quiet:hover { background: rgba(140, 100, 62, 0.12); color: #4d3319; }
+
+        .env-quiet:hover { background: rgba(201, 160, 48, 0.1); }
+
         @media (max-height: 700px) {
+            .env-invited-block { bottom: 110px; gap: 9px; }
+            .env-invited { font-size: 13px; letter-spacing: 5px; }
+            .env-spray { width: min(180px, 52%); }
         }
+
+        @media (max-width: 400px) {
+            .envelope .wax-seal { width: 104px; height: 104px; }
+            .envelope .wax-seal-text { font-size: 13px; }
+            .envelope .wax-seal-motif.top { top: 18px; }
+            .envelope .wax-seal-motif.bottom { bottom: 18px; }
+        }
+
+        /* ============================================================
+           OPENING THE ENVELOPE
+
+           Beats, from the tap:
+             0.00  wax gives — the seal presses in, breaks and lights (0.7s)
+             0.12  the flap starts off its crease (1.15s), gone by 1.27
+             0.50  the mouth of the envelope lights from inside (0.9s)
+             0.60  the flap's lining turns over as it passes vertical
+             0.95  the gilt fold of the pocket flares in the light
+             1.15  the burst climbs out of the mouth (1.9s)
+             1.65  sparks fly out with it
+             2.16  the screen blooms white
+             2.40  the letter is swapped in under the peak of the bloom (JS)
+             3.05  the light is gone and the letter is standing on its own
+             7.60  hand off to the site (JS)
+           Nothing lights before the flap is most of the way open — in the
+           reference the light only comes once the envelope is genuinely agape.
+           ============================================================ */
+        /* Negative, so the flap goes up and AWAY from the guest: the tip rises
+           and foreshortens instead of looming toward the camera on its way over.
+           Rotating the other way magnifies the flap through the perspective just
+           as it should be getting out of the way.
+
+           104 degrees, not 180: past vertical the flap is above its own crease
+           and the envelope's overflow has clipped it away, so every degree
+           beyond that is time the guest cannot see. Flipping the full 180 spent
+           over half the 1.15s out of sight and the visible lift was down to
+           about half a second. This leans it back just past upright — which is
+           where a just-opened flap actually sits — and gives the whole duration
+           to the part that shows. */
+        .cover-overlay.opening .env-flap { transform: rotateX(-104deg); }
+
+        .cover-overlay.opening .env-flap-shadow { opacity: 0; }
+
+        .cover-overlay.opening .wax-seal {
+            animation: envSealBreak 0.62s cubic-bezier(0.3, 0, 0.4, 1) forwards;
+            pointer-events: none;
+        }
+
+        /* Pressed in under the thumb, then the wax lets go and the shard goes
+           with the flap. */
+        @keyframes envSealBreak {
+            0%   { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+            14%  { opacity: 1; transform: translate(-50%, -50%) scale(0.9); }
+            34%  { opacity: 1; transform: translate(-50%, -50%) scale(1.08) rotate(-3deg); }
+            100% { opacity: 0; transform: translate(-50%, -50%) scale(1.3) rotate(-7deg); }
+        }
+
+        .cover-overlay.opening .env-crack {
+            animation: envCrack 0.7s ease-out 0.02s forwards;
+        }
+
+        @keyframes envCrack {
+            0%   { opacity: 0;    transform: scale(0.28); }
+            18%  { opacity: 0.95; transform: scale(0.6); }
+            55%  { opacity: 0.7;  transform: scale(0.95); }
+            100% { opacity: 0;    transform: scale(1.3); }
+        }
+
+        .cover-overlay.opening .env-mouth-light {
+            animation: envMouthLight 0.9s ease-out 0.5s forwards;
+        }
+
+        @keyframes envMouthLight {
+            0%   { opacity: 0; }
+            30%  { opacity: 0.85; }
+            60%  { opacity: 1; }
+            100% { opacity: 1; }
+        }
+
+        /* The pocket's gilt fold is the lit edge of the opening, so it flares as
+           the light comes up rather than staying the dull gold it is while the
+           envelope is shut. */
+        .cover-overlay.opening .env-pocket {
+            animation: envPocketRim 1.1s ease-out 0.95s forwards;
+        }
+
+        @keyframes envPocketRim {
+            0%   { background: linear-gradient(180deg, rgba(214, 172, 74, 0.62), rgba(150, 100, 30, 0.5) 40%, rgba(120, 78, 22, 0.3)); }
+            100% { background: linear-gradient(180deg, rgba(255, 246, 214, 0.95), rgba(244, 208, 122, 0.9) 40%, rgba(236, 190, 100, 0.75)); }
+        }
+
         .cover-overlay.opening .env-quiet {
             opacity: 0;
             pointer-events: none;
         }
-        /* The letter starts tucked away; rises out once the leaves part */
+
+        .cover-overlay.opening .env-invited-block {
+            animation: coverFadeOut 0.8s ease 0.9s forwards;
+        }
+
+        @keyframes coverFadeOut {
+            from { opacity: 1; } to { opacity: 0; }
+        }
+
+        /* The letter starts tucked away; rises out once the flap opens */
         /* The letter used to rise as a flat plane — the one moment on the page with
            a real camera, and the least three-dimensional thing in it. It now starts
-           lying back and tips upright as it clears the cover, hinged near its foot
-           the way a card being lifted out of a folder actually pivots.
+           lying back and tips upright as it clears the flap, hinged near its foot
+           the way a card being drawn out of an envelope actually pivots.
 
            perspective is inside the transform rather than on .cover-overlay: that
            element is position: fixed and giving it a perspective would make it a
@@ -1858,31 +1956,23 @@
             position: relative;
             z-index: 5;
             opacity: 0;
-            transform-origin: 50% 60%;
-            /* Barely anything: it comes up THROUGH the fading leaves, so a big
-               tip-and-rise fought the dissolve and was the most forced beat in the
-               sequence. A hair of scale and a long fade is all the clip does. */
-            transform: perspective(1500px) scale(0.94);
-            /* An S-curve on the opacity, not `ease`. The letter is deep maroon and
-               it dissolves up over a plate of light, so every frame it spends near
-               half opacity is a frame of maroon-and-cream mud. The S holds low,
-               crosses the middle quickly and settles — same 1.5s, far less time in
-               the muddy band. */
-            transition: transform 1.9s cubic-bezier(0.28, 0.7, 0.28, 1),
-                        opacity 1.5s cubic-bezier(0.65, 0.02, 0.3, 1);
+            transform-origin: 50% 88%;
+            transform: perspective(1500px) rotateX(24deg) translateY(16%) scale(0.62);
+            transition: transform 1.3s cubic-bezier(0.22, 0.9, 0.3, 1), opacity 0.9s ease;
             pointer-events: none;
         }
 
         .cover-overlay.letter-out .cover-invitation {
             opacity: 1;
-            transform: perspective(1500px) scale(1);
+            transform: perspective(1500px) rotateX(0deg) translateY(0) scale(1);
             pointer-events: auto;
         }
 
-        /* Keeps the translateX(-50%) that centres the panel; dropping it here made
-           the cover jump sideways on the frame it started fading. */
-        .cover-overlay.letter-out .cover-doors {
+        /* Keeps the translateX(-50%) that centres the envelope; dropping it here
+           made the envelope jump sideways on the frame it started fading. */
+        .cover-overlay.letter-out .envelope {
             opacity: 0;
+            transform: translateX(-50%) translateY(4%) scale(1.05);
             pointer-events: none;
         }
 
@@ -1897,7 +1987,9 @@
         .cover-overlay .cover-name:first-child,
         .cover-overlay .cover-ampersand,
         .cover-overlay .cover-name:last-child,
-        .cover-overlay .cover-ornament-bottom {
+        .cover-overlay .cover-date,
+        .cover-overlay .cover-ornament-bottom,
+        .cover-overlay .cover-venue {
             animation: none;
             opacity: 0;
         }
@@ -1927,10 +2019,9 @@
         .cover-overlay.letter-out .cover-name:first-child { animation: coverFadeSlideRight 1.2s ease forwards 0.8s; }
         .cover-overlay.letter-out .cover-ampersand   { animation: coverFadeScale 1s ease forwards 1.1s; }
         .cover-overlay.letter-out .cover-name:last-child  { animation: coverFadeSlideLeft 1.2s ease forwards 1.25s; }
-        /* 1.5s, not the 1.75s it was: the date used to write on at 1.6s between the
-           names and this, and without it the cascade stalled for half a second on
-           the last name before the tail ornament arrived. */
-        .cover-overlay.letter-out .cover-ornament-bottom  { animation: coverFadeIn 1s ease forwards 1.5s; }
+        .cover-overlay.letter-out .cover-date        { animation: coverFadeIn 1s ease forwards 1.6s; }
+        .cover-overlay.letter-out .cover-ornament-bottom  { animation: coverFadeIn 1s ease forwards 1.75s; }
+        .cover-overlay.letter-out .cover-venue       { animation: coverFadeIn 1s ease forwards 1.95s; }
 
         /* ---- Light burst out of the envelope mouth ----
            Anchored to the middle of the open mouth — between the flap's V and the
@@ -1954,14 +2045,8 @@
            been glowing from inside since 0.50s, so by the time the rays appear
            there is genuinely an open envelope for them to come out of. Runs to
            3.05s, which brackets the letter swap at 2.40s. */
-        /* Held right down from what the envelope cover used, and no screen-wide
-           bloom at all: the clip's opening has no flash in it. Light gathers
-           between the leaves (see .cd-glow) and the letter resolves through them.
-           The burst survives as a faint warmth behind the dissolve rather than as
-           an event of its own. */
         .cover-overlay.opening .env-burst {
-            animation: burstLife 1.9s ease-out 0.5s forwards;
-            opacity: 0.42;
+            animation: burstLife 1.9s ease-out 1.15s forwards;
         }
 
         /* Ramps rather than snapping on: the mouth leaks light first, and this
@@ -2084,9 +2169,7 @@
         }
 
         .cover-overlay.opening .env-spark {
-            /* Off on this cover: sparks read as an explosion, and the clip's
-               leaves simply dissolve. */
-            animation: none;
+            animation: sparkFly var(--dur, 1.6s) cubic-bezier(0.12, 0.75, 0.3, 1) var(--delay, 1s) forwards;
         }
 
         @keyframes sparkFly {
@@ -2130,9 +2213,9 @@
                 rgba(150, 90, 30, 0) 100%);
         }
 
-        /* No flash. Kept in the DOM because the sparkle/bloom layers share it,
-           but nothing drives it on this cover. */
-        .cover-overlay.opening .cover-flash { animation: none; }
+        .cover-overlay.opening .cover-flash {
+            animation: coverFlash 1.15s ease-out 1.85s forwards;
+        }
 
         @keyframes coverFlash {
             0%   { opacity: 0; }
@@ -2150,9 +2233,9 @@
 
             /* Same beats as the full sequence so the bloom still brackets the
                letter swap — just no rays, sparks or growing core. */
-            .cover-overlay.opening .env-burst { animation: none; opacity: 0; }
-            .cover-overlay.opening .env-burst-core { animation: none; }
-            .cover-overlay.opening .cover-flash { animation: none; }
+            .cover-overlay.opening .env-burst { animation: burstLife 1.9s ease-out 1.15s forwards; }
+            .cover-overlay.opening .env-burst-core { animation: none; transform: scale(1.3); }
+            .cover-overlay.opening .cover-flash { animation: coverFlash 1.1s ease-out 1.85s forwards; }
         }
 
         @keyframes coverFadeIn {
@@ -2737,13 +2820,9 @@
         .gold-particle:nth-child(9) { left: 5%; animation-delay: 3.5s; }
         .gold-particle:nth-child(10) { left: 85%; animation-delay: 2.5s; }
 
-        /* --particle-rise is how far a particle climbs. It defaults to a viewport,
-           which is right for the full-height sections that use these (travel,
-           couple, rsvp); .section-hashtag is content-height and overrides it, or
-           its particles would be clipped below the band for most of their cycle. */
         @keyframes particleFloat {
-            0% { transform: translateY(var(--particle-rise, 100vh)) scale(0); opacity: 0; }
-            10% { opacity: 0.8; transform: translateY(calc(var(--particle-rise, 100vh) * 0.9)) scale(1); }
+            0% { transform: translateY(100vh) scale(0); opacity: 0; }
+            10% { opacity: 0.8; transform: translateY(90vh) scale(1); }
             90% { opacity: 0.4; }
             100% { transform: translateY(-20px) scale(0.5); opacity: 0; }
         }
@@ -3196,6 +3275,22 @@
         }
 
         .couple-ampersand.visible {
+            opacity: 1;
+        }
+
+        .wedding-date {
+            font-family: 'Cinzel', serif;
+            font-size: 18px;
+            letter-spacing: 3px;
+            color: #c9a030;
+            margin-top: 25px;
+            position: relative;
+            z-index: 1;
+            opacity: 0;
+            transition: all 0.8s ease 0.5s;
+        }
+
+        .wedding-date.visible {
             opacity: 1;
         }
 
@@ -5185,7 +5280,7 @@
             border: 1.5px solid rgba(201, 160, 48, 0.55);
             background: linear-gradient(180deg, #4a1a1a 0%, #300f0f 100%);
             box-shadow: 0 12px 34px rgba(0, 0, 0, 0.45),
-                        inset 0 0 26px rgba(176, 128, 52, 0.12);
+                        inset 0 0 24px rgba(201, 160, 48, 0.07);
             overflow: hidden;
             opacity: 0;
             transform: translateY(16px) scale(0.97);
@@ -5273,19 +5368,7 @@
         }
 
         /* The only thing written on the foil, so it sits in the middle of it
-           rather than tucked along the bottom edge.
-
-           This is the one instruction on the page a guest cannot afford to miss,
-           and it used to be easy to: 12px at weight 600 in a brown held at 0.82
-           alpha, over a bright gold gradient, measured 3.66:1 against the foil at
-           its brightest and 2.43:1 at its dimmest — under the 4.5:1 that text this
-           size wants, and the old pulse floor of 0.55 meant it sat near the dim end
-           for most of its cycle. Bigger, heavier, fully opaque, and a much darker
-           brown so it reads as printed on the foil rather than tarnished into it.
-
-           text-indent is HALF the letter-spacing: the trailing space after the last
-           glyph widens the line box, so centred text lands that much left of
-           centre. Same correction as .cd-cartouche-text. */
+           rather than tucked along the bottom edge. */
         .scratch-nudge {
             position: absolute;
             left: 0;
@@ -5293,28 +5376,20 @@
             top: 50%;
             text-align: center;
             font-family: 'Cinzel', serif;
-            font-size: 14px;
-            font-weight: 700;
-            letter-spacing: 3.4px;
-            text-indent: 1.7px;
-            color: #3d1e02;
-            /* A cream lift under the glyphs and a soft halo around them. The foil's
-               gradient runs from #8a5a1a to #f5e59a, so the halo is what keeps the
-               contrast up over the dark corners as well as the bright middle. */
-            text-shadow: 0 1px 0 rgba(255, 250, 224, 0.75),
-                         0 0 12px rgba(255, 248, 214, 0.6);
+            font-size: 12px;
+            font-weight: 600;
+            letter-spacing: 3.2px;
+            color: rgba(74, 40, 6, 0.82);
+            text-shadow: 0 1px 0 rgba(255, 246, 207, 0.45);
             pointer-events: none;
             transform: translateY(-50%);
             transition: opacity 0.4s ease;
             animation: scratchNudge 2.6s ease-in-out infinite;
         }
 
-        /* Breathes rather than fades. The old keyframe dropped to 0.55 opacity,
-           which is what made it easy to miss; the attention cue is now the scale,
-           so the text can stay legible the whole way through. */
         @keyframes scratchNudge {
-            0%, 100% { opacity: 0.88; transform: translateY(-50%) scale(1); }
-            50%      { opacity: 1;    transform: translateY(-50%) scale(1.045); }
+            0%, 100% { opacity: 0.55; }
+            50%      { opacity: 1; }
         }
 
         .scratch-card.scratching .scratch-nudge,
@@ -5428,35 +5503,10 @@
         }
 
         /* Section 7: the hashtag moment. The countdown that used to live here
-           now sits behind the scratch card, several sections up.
-
-           Sized by its content, NOT by the viewport like every other section.
-           It holds three short lines — 118px of type measured at 430x932 — and at
-           the inherited min-height: 100vh it spent a whole screen of scroll saying
-           them. It was the only section on the page anywhere near that empty: the
-           couple section fills 68% of its box and the RSVP 87%, this one 13%. It is
-           a breath between the photo album and the RSVP form, so it is padded like
-           one instead of stretched to a screen.
-
-           Fixed px padding rather than the vh-clamp the other sections use, so the
-           band's height is deterministic — --particle-rise below has to match it.
-
-           Doubled class on purpose. The responsive `.section { padding: ... }`
-           rules live further down the stylesheet, and at equal specificity the
-           later rule wins — a single .section-hashtag lost its padding to them on
-           every phone width and the band came out 238px instead of 334px. */
-        .section.section-hashtag {
+           now sits behind the scratch card, several sections up. */
+        .section-hashtag {
             background: radial-gradient(ellipse at center bottom, rgba(60, 20, 20, 0.35) 0%, transparent 70%);
-            min-height: auto;
-            padding: 104px 24px 112px;
-            /* The gold particles rise a full viewport by default (particleFloat).
-               In a band this short they would spend most of their 8s cycle clipped
-               below it, so only two or three would ever be visible at once — with
-               100vh only 5 of the 10 were in the band. Set just above the tallest
-               the band measures (419px at desktop widths, 354px at 430) so they
-               still fade in *below* its bottom edge and rise in through it rather
-               than appearing partway up. */
-            --particle-rise: 420px;
+            padding: 40px 24px 80px;
             text-align: center;
             position: relative;
             overflow: hidden;
@@ -6034,6 +6084,7 @@
         @media (min-width: 769px) {
             .section { padding: 100px 60px; }
             .section-couple { padding-bottom: 50px; }
+            .section-hashtag { padding-top: 50px; }
             .couple-name { font-size: 86px; }
             .invite-heading { font-size: 52px; }
             .celebrations-heading, .story-heading, .couple-heading { font-size: 52px; }
@@ -6054,6 +6105,7 @@
         @media (min-width: 481px) and (max-width: 768px) {
             .section { padding: 80px 40px; }
             .section-couple { padding-bottom: 40px; }
+            .section-hashtag { padding-top: 40px; }
             .couple-name { font-size: 72px; }
             .invite-heading { font-size: 44px; letter-spacing: 10px; }
             .celebrations-heading, .story-heading, .couple-heading { font-size: 44px; }
@@ -6066,6 +6118,7 @@
         @media (max-width: 480px) {
             .section { padding: 50px 18px; }
             .section-couple { padding-bottom: 30px; }
+            .section-hashtag { padding-top: 30px; }
             .couple-name { font-size: 48px; }
             .couple-ampersand { font-size: 28px; }
             .invite-heading { font-size: 30px; letter-spacing: 6px; }
@@ -6101,6 +6154,7 @@
             .mantra { font-size: 17px; }
             .shloka { font-size: 15px; }
             .story-text, .couple-text { font-size: 18px; max-width: 320px; }
+            .wedding-date { font-size: 16px; }
             .save-date-btn { padding: 12px 24px; font-size: 11px; }
             .maps-btn { font-size: 11px; padding: 12px 24px; }
             .music-toggle {
@@ -8294,9 +8348,9 @@
                     <circle cx="234" cy="15" r="1.6" fill="currentColor" fill-opacity="0.85"/>
                 </symbol>
 
-                <!-- Keri turned into a corner of the zari border, with a short bead run
-                     following it and a bud dropped inside. -->
-                <symbol id="cover-corner-keri" viewBox="0 0 62 62">
+                <!-- Keri turned into the flap's top corner, with a short bead run
+                     following the fold and a bud dropped inside it. -->
+                <symbol id="env-flap-corner" viewBox="0 0 62 62">
                     <g fill="none" stroke="currentColor" stroke-linecap="round">
                         <path d="M0 15 Q0 0 15 0" stroke-width="1.3"/>
                         <path d="M5 22 Q5 5 22 5" stroke-width="0.9" stroke-dasharray="1.6 2.2"/>
@@ -8354,245 +8408,120 @@
                     <circle cx="75" cy="51" r="1.2" fill="currentColor" fill-opacity="0.85"/>
                     <circle cx="125" cy="51" r="1.2" fill="currentColor" fill-opacity="0.85"/>
                 </symbol>
-
-                <!-- Cusped (multi-foil) Mughal arch over two jambs, stretched to the
-                     panel by preserveAspectRatio="none" on the <svg>. The scallops
-                     are a run of small arcs across the crown. -->
-                <symbol id="cd-arch-path" viewBox="0 0 200 300" preserveAspectRatio="none">
-                    <g fill="none" stroke="currentColor" stroke-linejoin="round">
-                        <path d="M8 300 L8 96
-                                 q0 -10 8 -12
-                                 q-3 -12 8 -14 q-3 -12 9 -13 q-2 -12 10 -12
-                                 q-2 -13 11 -12 q0 -13 13 -11 q3 -13 15 -9
-                                 q6 -12 16 -3
-                                 q10 -9 16 3 q12 -4 15 9 q13 -2 13 11
-                                 q13 -1 11 12 q12 0 10 12 q12 1 9 13 q11 2 8 14
-                                 q8 2 8 12 L192 300"
-                              stroke-width="2.4"/>
-                        <path d="M17 300 L17 100
-                                 q0 -8 7 -10 q0 -20 22 -22 q4 -20 32 -20
-                                 q22 -14 44 0 q28 0 32 20 q22 2 22 22 q7 2 7 10 L183 300"
-                              stroke-width="1" stroke-opacity="0.55" stroke-dasharray="2 3"/>
-                    </g>
-                </symbol>
-
-                <!-- The cartouche that holds YOU ARE INVITED: a bracket-ended panel
-                     with a tight double rule and a bead finial at each end, which is
-                     the silhouette the reference clip uses — straight top and bottom
-                     edges, each end a soft cusp into a shallow belly.
-
-                     Both paths are GENERATED, not hand-drawn. One quarter (top edge
-                     end -> right tip) was authored and then mirrored in both axes, so
-                     symmetry is exact and every join is tangent-continuous. The
-                     hand-drawn oval that used to live here had a kink at each lower
-                     corner (a C-curve meeting a q-curve at a different angle) and sat
-                     2 units low, since it spanned y 6..94 in a box whose centre — and
-                     whose bead finials — are at 48. Do not "tidy" these numbers by
-                     hand; regenerate them instead. The inner rule is offset 4 units
-                     on both axes, not uniformly scaled, so the gap stays even. -->
-                <symbol id="cd-cartouche-frame" viewBox="0 0 230 96">
-                    <g fill="none" stroke="currentColor" stroke-linejoin="round">
-                        <path d="M 72 11 L 158 11 C 172 11 180 12 184 17 C 188 22 188 26 191 30
-                                 C 196 35 203 39 203 48 C 203 57 196 61 191 66
-                                 C 188 70 188 74 184 79 C 180 84 172 85 158 85
-                                 L 72 85 C 58 85 50 84 46 79 C 42 74 42 70 39 66
-                                 C 34 61 27 57 27 48 C 27 39 34 35 39 30
-                                 C 42 26 42 22 46 17 C 50 12 58 11 72 11 Z"
-                              stroke-width="1.6" fill="#fffdf6" fill-opacity="0.72"/>
-                        <path d="M 73.95 15 L 156.05 15 C 169.41 15 177.05 15.89 180.86 20.35
-                                 C 184.68 24.81 184.68 28.38 187.55 31.95
-                                 C 192.32 36.41 199 39.97 199 48 C 199 56.03 192.32 59.59 187.55 64.05
-                                 C 184.68 67.62 184.68 71.19 180.86 75.65
-                                 C 177.05 80.11 169.41 81 156.05 81 L 73.95 81
-                                 C 60.59 81 52.95 80.11 49.14 75.65 C 45.32 71.19 45.32 67.62 42.45 64.05
-                                 C 37.68 59.59 31 56.03 31 48 C 31 39.97 37.68 36.41 42.45 31.95
-                                 C 45.32 28.38 45.32 24.81 49.14 20.35 C 52.95 15.89 60.59 15 73.95 15 Z"
-                              stroke-width="0.55" stroke-opacity="0.7"/>
-                        <path d="M10 48 L20 48 M210 48 L220 48" stroke-width="1"/>
-                    </g>
-                    <circle cx="7" cy="48" r="2.2" fill="currentColor"/>
-                    <circle cx="223" cy="48" r="2.2" fill="currentColor"/>
-                </symbol>
-
-                <!-- Foliage for the arch's shoulders, in the reference clip's
-                     position. Line-work rather than watercolour: this site draws
-                     its botany in gold hairline everywhere else. -->
-                <symbol id="cd-spray" viewBox="0 0 160 90">
-                    <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M4 84 C34 78 66 60 92 34 C104 22 118 12 138 6" stroke-width="1.2"/>
-                        <g stroke-width="1">
-                            <path d="M28 78 C26 68 30 60 38 56 C38 66 34 74 28 78Z" fill="currentColor" fill-opacity="0.12"/>
-                            <path d="M44 70 C48 60 58 56 66 58 C60 66 52 70 44 70Z" fill="currentColor" fill-opacity="0.1"/>
-                            <path d="M62 56 C60 46 64 38 72 34 C72 44 68 52 62 56Z" fill="currentColor" fill-opacity="0.12"/>
-                            <path d="M84 42 C88 32 98 28 106 30 C100 38 92 42 84 42Z" fill="currentColor" fill-opacity="0.1"/>
-                            <path d="M104 26 C102 16 106 10 114 6 C114 16 110 22 104 26Z" fill="currentColor" fill-opacity="0.12"/>
-                        </g>
-                        <g stroke-width="0.85">
-                            <path d="M74 48 C78 44 84 44 86 48 C84 52 78 52 74 48Z" fill="currentColor" fill-opacity="0.16"/>
-                            <path d="M120 16 C124 12 130 12 132 16 C130 20 124 20 120 16Z" fill="currentColor" fill-opacity="0.16"/>
-                        </g>
-                        <circle cx="139" cy="5" r="1.6" fill="currentColor" stroke="none"/>
-                        <circle cx="80" cy="48" r="1.1" fill="currentColor" stroke="none"/>
-                    </g>
-                </symbol>
-
-                <!-- A bird on the wing under the crown, where the clip has its
-                     hummingbird. Filled, not outlined: at 50px an outline of a
-                     bird reads as a scribble. -->
-                <symbol id="cd-bird" viewBox="0 0 90 60">
-                    <g fill="currentColor">
-                        <path d="M40 34 C50 30 62 32 70 38 C60 44 48 44 40 40Z"/>
-                        <circle cx="36" cy="33" r="6"/>
-                        <path d="M30 31 L14 26 L30 36Z"/>
-                        <path d="M44 30 C46 18 58 8 76 6 C66 16 58 26 52 34Z" opacity="0.85"/>
-                        <path d="M46 38 C54 38 66 42 74 50 C62 50 52 46 46 42Z" opacity="0.6"/>
-                    </g>
-                    <g fill="none" stroke="currentColor" stroke-width="1.3">
-                        <path d="M68 40 L84 46 M66 42 L80 52"/>
-                    </g>
-                </symbol>
-
-                <symbol id="cd-butterfly" viewBox="0 0 70 60">
-                    <g fill="currentColor">
-                        <path d="M34 22 C24 6 10 2 5 12 C0 23 16 31 32 30Z" opacity="0.85"/>
-                        <path d="M36 22 C46 6 60 2 65 12 C70 23 54 31 38 30Z" opacity="0.85"/>
-                        <path d="M32 32 C22 34 14 42 18 50 C23 57 31 46 33 38Z" opacity="0.7"/>
-                        <path d="M38 32 C48 34 56 42 52 50 C47 57 39 46 37 38Z" opacity="0.7"/>
-                        <path d="M33.2 18 C32 26 32 36 34 44 C36 36 36 26 34.8 18Z"/>
-                    </g>
-                    <g fill="none" stroke="currentColor" stroke-width="1.1" stroke-linecap="round">
-                        <path d="M33 17 C30 10 25 6 20 5 M36 17 C39 10 44 6 49 5"/>
-                    </g>
-                    <g fill="currentColor">
-                        <circle cx="19.5" cy="4.5" r="1.6"/><circle cx="49.5" cy="4.5" r="1.6"/>
-                    </g>
-                </symbol>
             </defs>
         </svg>
 
-        <!-- The cover: one painted panel that opens down the middle (first thing
-             guests see). Each leaf carries a copy of the whole panel at double
-             width, pinned to its own side, so everything crossing the centre is
-             cut in half and the parting reads as one picture opening. See "THE
-             COVER" in the CSS. -->
-        <div class="cover-doors" id="coverDoors">
-            <!-- First in the box and behind both leaves: the light they part onto. -->
-            <span class="cd-veil" aria-hidden="true"></span>
-            <div class="cd-leaf left">
-                <div class="cd-panel" aria-hidden="true">
-                    <div class="env-emboss"></div>
-                    <div class="env-buti"></div>
-                    <div class="cd-arch">
-                        <svg viewBox="0 0 200 300" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
-                            <use href="#cd-arch-path"/>
-                        </svg>
-                    </div>
-                    <div class="env-zari"></div>
-                    <div class="env-kanguri"></div>
-                    <span class="env-border-corner tl">
-                        <svg viewBox="0 0 62 62" xmlns="http://www.w3.org/2000/svg"><use href="#cover-corner-keri"/></svg>
-                    </span>
-                    <span class="env-border-corner tr">
-                        <svg viewBox="0 0 62 62" xmlns="http://www.w3.org/2000/svg"><use href="#cover-corner-keri"/></svg>
-                    </span>
-                    <span class="env-border-corner bl">
-                        <svg viewBox="0 0 62 62" xmlns="http://www.w3.org/2000/svg"><use href="#cover-corner-keri"/></svg>
-                    </span>
-                    <span class="env-border-corner br">
-                        <svg viewBox="0 0 62 62" xmlns="http://www.w3.org/2000/svg"><use href="#cover-corner-keri"/></svg>
-                    </span>
-                    <span class="cd-pillar left" aria-hidden="true"></span>
-                    <span class="cd-pillar right" aria-hidden="true"></span>
-                    <span class="cd-spray left">
-                        <svg viewBox="0 0 160 90" xmlns="http://www.w3.org/2000/svg"><use href="#cd-spray"/></svg>
-                    </span>
-                    <span class="cd-bird">
-                        <svg viewBox="0 0 90 60" xmlns="http://www.w3.org/2000/svg"><use href="#cd-bird"/></svg>
-                    </span>
-                    <span class="cd-butterfly">
-                        <svg viewBox="0 0 70 60" xmlns="http://www.w3.org/2000/svg"><use href="#cd-butterfly"/></svg>
-                    </span>
-                    <img class="cd-couple" src="images/cover-couple.webp" alt=""
-                         width="695" height="1275" decoding="async">
-                    <!-- After the plate, so the peacock stands in front of it the way
-                         the clip's does. peacock2/parrot1 of the four supplied: those
-                         are the two that face inward, and the parrot carries its own
-                         blossom branch, which is why the right-hand drawn spray came
-                         out. -->
-                    <span class="cd-peacock-shadow" aria-hidden="true"></span>
-                    <img class="cd-peacock" src="images/cover-peacock.webp" alt=""
-                         width="470" height="510" decoding="async">
-                    <img class="cd-parrot" src="images/cover-parrot.webp" alt=""
-                         width="420" height="668" decoding="async">
-                    <span class="cd-cartouche">
-                        <svg viewBox="0 0 230 96" xmlns="http://www.w3.org/2000/svg"><use href="#cd-cartouche-frame"/></svg>
-                        <span class="cd-cartouche-text">You Are<br>Invited</span>
-                    </span>
-                </div>
-                <span class="cd-edge" aria-hidden="true"></span>
-            </div>
-            <div class="cd-leaf right">
-                <div class="cd-panel" aria-hidden="true">
-                    <div class="env-emboss"></div>
-                    <div class="env-buti"></div>
-                    <div class="cd-arch">
-                        <svg viewBox="0 0 200 300" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
-                            <use href="#cd-arch-path"/>
-                        </svg>
-                    </div>
-                    <div class="env-zari"></div>
-                    <div class="env-kanguri"></div>
-                    <span class="env-border-corner tl">
-                        <svg viewBox="0 0 62 62" xmlns="http://www.w3.org/2000/svg"><use href="#cover-corner-keri"/></svg>
-                    </span>
-                    <span class="env-border-corner tr">
-                        <svg viewBox="0 0 62 62" xmlns="http://www.w3.org/2000/svg"><use href="#cover-corner-keri"/></svg>
-                    </span>
-                    <span class="env-border-corner bl">
-                        <svg viewBox="0 0 62 62" xmlns="http://www.w3.org/2000/svg"><use href="#cover-corner-keri"/></svg>
-                    </span>
-                    <span class="env-border-corner br">
-                        <svg viewBox="0 0 62 62" xmlns="http://www.w3.org/2000/svg"><use href="#cover-corner-keri"/></svg>
-                    </span>
-                    <span class="cd-pillar left" aria-hidden="true"></span>
-                    <span class="cd-pillar right" aria-hidden="true"></span>
-                    <span class="cd-spray left">
-                        <svg viewBox="0 0 160 90" xmlns="http://www.w3.org/2000/svg"><use href="#cd-spray"/></svg>
-                    </span>
-                    <span class="cd-bird">
-                        <svg viewBox="0 0 90 60" xmlns="http://www.w3.org/2000/svg"><use href="#cd-bird"/></svg>
-                    </span>
-                    <span class="cd-butterfly">
-                        <svg viewBox="0 0 70 60" xmlns="http://www.w3.org/2000/svg"><use href="#cd-butterfly"/></svg>
-                    </span>
-                    <img class="cd-couple" src="images/cover-couple.webp" alt=""
-                         width="695" height="1275" decoding="async">
-                    <!-- After the plate, so the peacock stands in front of it the way
-                         the clip's does. peacock2/parrot1 of the four supplied: those
-                         are the two that face inward, and the parrot carries its own
-                         blossom branch, which is why the right-hand drawn spray came
-                         out. -->
-                    <span class="cd-peacock-shadow" aria-hidden="true"></span>
-                    <img class="cd-peacock" src="images/cover-peacock.webp" alt=""
-                         width="470" height="510" decoding="async">
-                    <img class="cd-parrot" src="images/cover-parrot.webp" alt=""
-                         width="420" height="668" decoding="async">
-                    <span class="cd-cartouche">
-                        <svg viewBox="0 0 230 96" xmlns="http://www.w3.org/2000/svg"><use href="#cd-cartouche-frame"/></svg>
-                        <span class="cd-cartouche-text">You Are<br>Invited</span>
-                    </span>
-                </div>
-                <span class="cd-edge" aria-hidden="true"></span>
+        <!-- Closed envelope (first thing guests see).
+             Painted back to front: the sheet, the inside of it, the bottom flap
+             folded up, the shadow the top flap throws, then the top flap itself
+             with the wax seal struck on its point. -->
+        <div class="envelope" id="envelope">
+            <!-- The sheet's own worked ground, seen in the band above the flap
+                 once it lifts -->
+            <div class="env-emboss" aria-hidden="true"></div>
+            <div class="env-buti" aria-hidden="true"></div>
+
+            <!-- The open mouth, hidden under the flap and the pocket until the
+                 flap moves. The light that climbs out is clipped to it. -->
+            <div class="env-inside" aria-hidden="true">
+                <div class="env-mouth-light"></div>
             </div>
 
-            <span class="cd-seam" aria-hidden="true"></span>
-            <span class="cd-glow" aria-hidden="true"></span>
+            <!-- Bottom flap, folded up: everything below the V. Gilt fold, a run
+                 of satin ticks inside it, then the worked field. -->
+            <div class="env-pocket" aria-hidden="true">
+                <div class="env-pocket-face">
+                    <div class="env-pocket-bead">
+                        <div class="env-pocket-bead-face">
+                            <div class="env-emboss"></div>
+                            <div class="env-buti"></div>
+                            <div class="env-zari"></div>
+                            <div class="env-kanguri"></div>
+                            <span class="env-border-corner bl">
+                                <svg viewBox="0 0 62 62" xmlns="http://www.w3.org/2000/svg"><use href="#env-flap-corner"/></svg>
+                            </span>
+                            <span class="env-border-corner br">
+                                <svg viewBox="0 0 62 62" xmlns="http://www.w3.org/2000/svg"><use href="#env-flap-corner"/></svg>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
-            <button class="cd-open" onclick="enterWithMusic()" aria-label="Open the invitation, with music">
-                <span class="cd-open-gem" aria-hidden="true"></span>
-                OPEN INVITE
-                <span class="cd-open-gem" aria-hidden="true"></span>
-            </button>
+            <!-- YOU ARE INVITED at the foot, between two gold sprays -->
+            <div class="env-invited-block">
+                <span class="env-spray" aria-hidden="true">
+                    <svg viewBox="0 0 200 62" xmlns="http://www.w3.org/2000/svg"><use href="#env-spray"/></svg>
+                </span>
+                <p class="env-invited">YOU ARE INVITED</p>
+                <span class="env-flourish flip" aria-hidden="true">
+                    <svg viewBox="0 0 300 30" xmlns="http://www.w3.org/2000/svg"><use href="#env-flourish"/></svg>
+                </span>
+            </div>
+
+            <div class="env-flap-shadow" aria-hidden="true"></div>
+
+            <!-- The top flap. Hinged on its head; the seal is inside it so it
+                 foreshortens and rides up with the paper. -->
+            <div class="env-flap">
+                <div class="env-flap-paper" aria-hidden="true">
+                    <!-- gilt fold, second rule, satin ticks, then the worked
+                         field with the crest and its swag on it -->
+                    <div class="env-flap-face">
+                        <div class="env-flap-rule">
+                            <div class="env-flap-rule-face">
+                                <div class="env-flap-bead">
+                                    <div class="env-flap-bead-face">
+                                        <div class="env-emboss"></div>
+                                        <div class="env-buti"></div>
+                                        <div class="env-zari"></div>
+                                        <span class="env-crest">
+                                            <svg viewBox="0 0 160 132" xmlns="http://www.w3.org/2000/svg"><use href="#env-crest"/></svg>
+                                        </span>
+                                        <span class="env-pendant">
+                                            <svg viewBox="0 0 14 100" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg"><use href="#env-pendant"/></svg>
+                                        </span>
+                                        <span class="env-border-corner tl">
+                                            <svg viewBox="0 0 62 62" xmlns="http://www.w3.org/2000/svg"><use href="#env-flap-corner"/></svg>
+                                        </span>
+                                        <span class="env-border-corner tr">
+                                            <svg viewBox="0 0 62 62" xmlns="http://www.w3.org/2000/svg"><use href="#env-flap-corner"/></svg>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="env-flap-fold"></div>
+                </div>
+                <button class="wax-seal" onclick="enterWithMusic()" aria-label="Open invitation with music">
+                    <span class="wax-seal-ring"></span>
+                    <span class="wax-seal-motif top" aria-hidden="true">
+                        <svg viewBox="0 0 30 12" xmlns="http://www.w3.org/2000/svg">
+                            <g fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round">
+                                <path d="M2 9 Q8 4 15 8 Q22 4 28 9"/>
+                                <path d="M15 8 L15 5"/>
+                            </g>
+                            <circle cx="15" cy="4" r="1.3" fill="currentColor"/>
+                        </svg>
+                    </span>
+                    <span class="wax-seal-text">Tap<br>to<br>open</span>
+                    <span class="wax-seal-motif bottom" aria-hidden="true">
+                        <svg viewBox="0 0 30 12" xmlns="http://www.w3.org/2000/svg">
+                            <g fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round">
+                                <path d="M2 9 Q8 4 15 8 Q22 4 28 9"/>
+                                <path d="M15 8 L15 5"/>
+                            </g>
+                            <circle cx="15" cy="4" r="1.3" fill="currentColor"/>
+                        </svg>
+                    </span>
+                </button>
+            </div>
+
+            <!-- Light from the wax giving way. Outside the flap: it is light, not
+                 paper, so it stays in the screen plane instead of rotating away. -->
+            <div class="env-crack" aria-hidden="true"></div>
+
             <button class="env-quiet" onclick="enterQuietly()">ENTER QUIETLY</button>
         </div>
 
@@ -8795,9 +8724,7 @@
                 <span class="cover-name">Nishant</span>
             </div>
 
-            <!-- No date on the letter: the scratch card further down is where the
-                 date is revealed, and this card is the very first thing a guest
-                 sees. -->
+            <p class="cover-date">Dec 1 &mdash; 2, 2026</p>
 
             <div class="cover-ornament-bottom">
                 <svg width="280" height="30" viewBox="0 0 300 30" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -9148,10 +9075,8 @@
             <span class="couple-name split-name" data-name="Nishant"></span>
         </div>
 
-        <!-- The date used to sit here, between the names and the request. It is the
-             scratch card's to give away now, so this line carries the extra top
-             margin the date's block used to contribute. -->
-        <p class="invite-sub animate" style="margin-top: 46px; text-align: center; max-width: 320px;">We request the honour of your gracious presence and blessings on the following events</p>
+        <p class="wedding-date animate shimmer-reveal">Dec 1 &mdash; 2, 2026</p>
+        <p class="invite-sub animate" style="margin-top: 30px; text-align: center; max-width: 320px;">We request the honour of your gracious presence and blessings on the following events</p>
     </section>
 
     <!-- Ornament Divider -->
@@ -9776,7 +9701,7 @@
             <div class="gold-particle"></div>
             <div class="gold-particle"></div>
         </div>
-        <h2 class="hashtag animate glow-on-visible"><span class="z-heading">#RuhisHantIsOver</span></h2>
+        <h2 class="hashtag animate glow-on-visible"><span class="z-heading">#RuhiNishant</span></h2>
         <p class="hashtag-meaning animate">Together Forever</p>
         <p class="countdown-message animate">We can't wait to celebrate this beautiful beginning with you.</p>
     </section>
@@ -9912,17 +9837,19 @@
             attemptPlay();
         }
 
-        // Cover reveal. The order matters more than the durations: the leaves
-        // have to be genuinely apart before the light comes through them, the way
-        // it is in the reference clip. See "OPENING THE COVER" in the CSS.
-        //   0.00s  tap; the button lets go, the leaves begin, the fade begins
-        //   0.15s  warmth gathers in the widening gap
-        //   0.90s  the letter starts resolving through them
-        //   1.60s  the leaves are gone
-        //   1.90s  the camera has finished pushing through
-        //   2.40s  the letter is fully up and its own cascade is running
+        // Envelope reveal. The order matters more than the durations: the flap
+        // has to be genuinely open before any light comes out of it, the way it
+        // is in the reference clip. See "OPENING THE ENVELOPE" in the CSS.
+        //   0.00s  tap; the wax presses in, breaks and lights (0.70s)
+        //   0.12s  the flap comes off its crease (1.15s), clear by 1.27s
+        //   0.50s  the mouth of the envelope lights from inside
+        //   0.95s  the gilt fold of the pocket flares
+        //   1.15s  the burst climbs out of the mouth (1.90s)
+        //   1.66s  sparks fly out with it
+        //   2.16s  the screen blooms white
+        //   2.40s  letter swapped in under the peak of the bloom
+        //   3.05s  light gone, letter standing on its own
         //   7.60s  hand off to the site
-        // No flash and no sparks on this cover: the clip cross-dissolves.
         // The letter's own cascade runs ~2.95s from the swap, so it holds fully
         // stitched for about two seconds before handing over.
         let envelopeOpened = false;
@@ -9934,10 +9861,7 @@
             overlay.classList.add('opening');
             // Letter is swapped in under the peak of the bloom, so it is already
             // there when the light clears rather than sliding in over it.
-            // 0.9s, not 2.4s: the letter has to be coming up WHILE the leaves are
-            // still fading, or the cover empties out and then the card arrives as a
-            // separate event. The clip cross-dissolves the two.
-            setTimeout(() => overlay.classList.add('letter-out'), 900);
+            setTimeout(() => overlay.classList.add('letter-out'), 2400);
             setTimeout(() => {
                 hideCover();
                 // 12s here used to cover the intro photo plate, which ran for 5.5s
@@ -10333,7 +10257,7 @@
                     const rect = section.getBoundingClientRect();
                     const progress = rect.top / window.innerHeight;
                     const fgOffset = progress * 12;
-                    const children = section.querySelectorAll('.invite-text, .couple-heading, .couple-text, .hashtag, .hashtag-meaning, .countdown-label, .countdown-message, .rsvp-heading, .rsvp-sub, .rsvp-form');
+                    const children = section.querySelectorAll('.invite-text, .wedding-date, .couple-heading, .couple-text, .hashtag, .hashtag-meaning, .countdown-label, .countdown-message, .rsvp-heading, .rsvp-sub, .rsvp-form');
                     children.forEach(child => {
                         if (child.matches('.layer-back, .layer-mid, .layer-fore')) return;
                         // A form that has been sent is animating itself out via
@@ -11267,7 +11191,7 @@
             slug: 'ruhi-nishant-wedding',
             title: 'Ruhi & Nishant Wedding',
             location: VENUE,
-            details: 'Wedding celebrations of Ruhi & Nishant. #RuhisHantIsOver',
+            details: 'Wedding celebrations of Ruhi & Nishant. #RuhiNishant',
             // Multi-day all-day event: Dec 1–2, 2026. Per ICS spec, DTEND for all-day is exclusive (day after last).
             startYMD: '20261201',
             endYMDExclusive: '20261203'
@@ -11285,28 +11209,28 @@
                 label: 'MAYRA', slug: 'ruhi-nishant-mayra',
                 title: 'Mayra — Ruhi & Nishant',
                 location: VENUE,
-                details: 'Noon onwards. The maternal uncle blesses the bride with gifts and jewellery. #RuhisHantIsOver',
+                details: 'Noon onwards. The maternal uncle blesses the bride with gifts and jewellery. #RuhiNishant',
                 startYMD: '20261201', endYMDExclusive: '20261202'
             },
             sangeet: {
                 label: 'SANGEET', slug: 'ruhi-nishant-sangeet',
                 title: 'Sangeet — Ruhi & Nishant',
                 location: VENUE,
-                details: 'Evening onwards. An evening of music, dance and joy. #RuhisHantIsOver',
+                details: 'Evening onwards. An evening of music, dance and joy. #RuhiNishant',
                 startYMD: '20261201', endYMDExclusive: '20261202'
             },
             haldi: {
                 label: 'HALDI', slug: 'ruhi-nishant-haldi',
                 title: 'Haldi — Ruhi & Nishant',
                 location: VENUE,
-                details: 'Morning onwards. The turmeric ritual for the couple. #RuhisHantIsOver',
+                details: 'Morning onwards. The turmeric ritual for the couple. #RuhiNishant',
                 startYMD: '20261202', endYMDExclusive: '20261203'
             },
             vivah: {
                 label: 'SHUBH VIVAH', slug: 'ruhi-nishant-shubh-vivah',
                 title: 'Shubh Vivah — Ruhi & Nishant',
                 location: VENUE,
-                details: 'Evening onwards. The wedding ceremony. #RuhisHantIsOver',
+                details: 'Evening onwards. The wedding ceremony. #RuhiNishant',
                 startYMD: '20261202', endYMDExclusive: '20261203'
             }
         };
