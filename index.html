@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="cover-up">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -41,6 +41,16 @@
                browsers without it (Safari < 16). */
             overflow-x: hidden;
             overflow-x: clip;
+        }
+
+        /* While the cover is up there is nothing behind it to scroll to yet, and
+           scrolling it meant the guest came out of the envelope already past the
+           blessings. overflow-y only, so the overflow-x: clip above survives.
+           Dropped by releasePageScroll() at the handoff. */
+        html.cover-up,
+        html.cover-up body {
+            overflow-y: hidden;
+            touch-action: none;
         }
 
         body {
@@ -521,9 +531,16 @@
             width: auto;
             height: 100vh;
             height: 100svh;
+            /* …but never shorter than the LARGE viewport. svh is the height with
+               the URL bar showing, so the moment a phone retracted its bar a
+               strip of the page appeared below the cover — visible, and a swipe
+               there scrolled the page behind. This backdrop grows to cover it
+               while the card and the envelope inside stay svh, so nothing drifts
+               as the bar toggles; the extra height lands below them. */
+            min-height: 100lvh;
             z-index: 9999;
             display: flex;
-            align-items: center;
+            align-items: flex-start;
             justify-content: center;
             background: #2d1010;
             transition: opacity 1s ease, visibility 1s ease;
@@ -547,11 +564,14 @@
         .cover-invitation {
             width: 100%;
             max-width: 500px;
-            /* 100% of the overlay, not 100vh: vh exceeds the overlay's svh on a
-               phone and overshot it outright once the reserved padding below was
-               added, so the card grew past the screen and took the toran and the
-               diya row off the top and bottom with it. */
-            height: 100%;
+            /* svh, not vh and no longer 100% of the overlay: vh exceeds the
+               URL-bar-visible height on a phone and overshot it outright once the
+               reserved padding below was added, so the card grew past the screen
+               and took the toran and the diya row off the top and bottom with it.
+               100% would now follow the overlay up to its lvh floor, which is the
+               same overshoot by another route. */
+            height: 100vh;
+            height: 100svh;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -960,6 +980,61 @@
             animation: coverFadeIn 1s ease forwards 2.2s;
         }
 
+        /* ---- NEXT, on the letter ----
+           In the flow as the last thing in the centred block rather than pinned
+           to the card's bottom: the short-window tiers below trim the reserved
+           bottom padding to 64px, and the diya row already stands 65px tall
+           there, so anything absolutely positioned down there lands on top of a
+           diya. Gold on the dark card, where the envelope's buttons were brown
+           on cream. Arrives after the cascade has landed — offered, not rushed. */
+        .cover-next {
+            margin-top: 26px;
+            padding: 11px 26px 11px 28px;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: transparent;
+            border: 1px solid rgba(201, 160, 48, 0.55);
+            border-radius: 50px;
+            color: #d9bd6e;
+            font-family: 'Cinzel', serif;
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: 3px;
+            cursor: pointer;
+            opacity: 0;
+            z-index: 4;
+            transition: background 0.3s ease, border-color 0.3s ease, color 0.3s ease;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .cover-next:hover {
+            background: rgba(201, 160, 48, 0.12);
+            border-color: rgba(201, 160, 48, 0.9);
+            color: #f0dca0;
+        }
+
+        /* A chevron, drawn rather than typed: a glyph arrow in Cinzel falls back
+           to another family and sits off the text baseline. */
+        .cover-next-arrow {
+            width: 6px;
+            height: 6px;
+            border-right: 1.4px solid currentColor;
+            border-top: 1.4px solid currentColor;
+            transform: rotate(45deg);
+            transition: transform 0.3s ease;
+        }
+
+        .cover-next:hover .cover-next-arrow { transform: rotate(45deg) translate(2px, -2px); }
+
+        /* Not tappable while it is invisible behind the closed envelope. */
+        .cover-overlay .cover-next { pointer-events: none; }
+
+        .cover-overlay.letter-out .cover-next {
+            animation: coverFadeIn 0.9s ease forwards 2.1s;
+            pointer-events: auto;
+        }
+
         /* ---- Short-window tiers ----
            Everything on the card is pinned either to its edges (toran, kanguri,
            diyas) or to its centre (the type), so when the window is shorter than
@@ -972,6 +1047,7 @@
             .cover-heading { margin-top: 18px; }
             .cover-names { margin: 16px 0; }
             .cover-ornament-bottom { margin-top: 18px; }
+            .cover-next { margin-top: 20px; }
         }
 
         @media (max-height: 760px) {
@@ -982,6 +1058,7 @@
             .cover-shubh { font-size: clamp(14px, 3.8vw, 17px); }
             .cover-names { margin: 12px 0; }
             .cover-ornament-bottom { margin-top: 12px; }
+            .cover-next { margin-top: 14px; padding: 9px 22px 9px 24px; font-size: 10px; }
         }
 
         .cover-buttons {
@@ -1067,7 +1144,13 @@
         .cover-doors {
             position: absolute;
             top: 0;
-            bottom: 0;
+            /* Matched to the letter card rather than stretched to the backdrop's
+               lvh floor, so the envelope and the card it opens into are the same
+               box and the leaves' proportions don't change with the URL bar.
+               No `bottom` with this: top + bottom + height over-constrains an
+               absolutely positioned box and the height is the part that loses. */
+            height: 100vh;
+            height: 100svh;
             left: 50%;
             width: 100%;
             max-width: 500px;
@@ -8834,6 +8917,13 @@
                 </svg>
             </div>
 
+            <!-- The letter holds for five seconds after its cascade before it
+                 hands over to the page. This is for the guest who doesn't want to
+                 wait it out. -->
+            <button class="cover-next" id="coverNext" type="button" onclick="skipCoverWait()">
+                NEXT
+                <span class="cover-next-arrow" aria-hidden="true"></span>
+            </button>
 
         </div>
     </div>
@@ -9874,9 +9964,33 @@
     </footer>
 
     <script>
+        // ---- The page does not scroll while the cover is up ----
+        // The overlay is position: fixed, so it never was a scroll container: a
+        // swipe anywhere on it scrolled the page underneath instead, and the
+        // guest came out of the cover already a screen or two into the
+        // invitation, having missed the blessings. html carries .cover-up from
+        // the markup so the lock is in force before the first paint, and
+        // touchmove is cancelled as well because overflow: hidden alone does not
+        // reliably stop a touch drag on iOS Safari.
+        const blockCoverTouch = (e) => { e.preventDefault(); };
+        document.addEventListener('touchmove', blockCoverTouch, { passive: false });
+
+        // A reload otherwise restores the previous scroll position behind the
+        // cover, which lands the guest mid-page the moment it fades.
+        if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+
+        function releasePageScroll() {
+            document.documentElement.classList.remove('cover-up');
+            document.removeEventListener('touchmove', blockCoverTouch);
+            // Whatever moved — a restored position, a desktop keypress — the
+            // invitation starts at the top.
+            window.scrollTo(0, 0);
+        }
+
         // Cover overlay
         function hideCover() {
             const overlay = document.getElementById('coverOverlay');
+            releasePageScroll();
             overlay.classList.add('hidden');
             // Once the 1s fade is done, drop it out of the render tree entirely so
             // its animations stop. See .cover-overlay.gone.
@@ -9954,6 +10068,30 @@
         // The letter's own cascade runs ~2.95s from the swap, so it holds fully
         // stitched for about two seconds before handing over.
         let envelopeOpened = false;
+        let coverHandoffTimer = null;
+        let coverHandedOver = false;
+
+        // The one way out of the cover, whether the clock got here or the guest
+        // pressed NEXT. Idempotent: the timer is cancelled on the way through, so
+        // a press can't be followed by a second handoff.
+        function handOverToPage() {
+            if (coverHandedOver) return;
+            coverHandedOver = true;
+            if (coverHandoffTimer) { clearTimeout(coverHandoffTimer); coverHandoffTimer = null; }
+            hideCover();
+            // 12s here used to cover the intro photo plate, which ran for 5.5s
+            // after the handoff before the site was really readable. With the
+            // plate gone the guest lands straight on the page, so the hint
+            // comes on its own reading beat instead.
+            setTimeout(showScrollHint, 4500);
+        }
+
+        // NEXT, on the letter.
+        function skipCoverWait() {
+            if (!envelopeOpened) return;   // nothing to skip yet
+            handOverToPage();
+        }
+
         function openEnvelope(withMusic) {
             if (envelopeOpened) return;
             envelopeOpened = true;
@@ -9966,14 +10104,7 @@
             // still fading, or the cover empties out and then the card arrives as a
             // separate event. The clip cross-dissolves the two.
             setTimeout(() => overlay.classList.add('letter-out'), 900);
-            setTimeout(() => {
-                hideCover();
-                // 12s here used to cover the intro photo plate, which ran for 5.5s
-                // after the handoff before the site was really readable. With the
-                // plate gone the guest lands straight on the page, so the hint
-                // comes on its own reading beat instead.
-                setTimeout(showScrollHint, 4500);
-            }, 7600);
+            coverHandoffTimer = setTimeout(handOverToPage, 7600);
         }
 
         function enterWithMusic() { openEnvelope(true); }
@@ -10112,22 +10243,21 @@
             function attachOrient() {
                 window.addEventListener('deviceorientation', handleOrient, { passive: true });
             }
-            // Gyroscope is on for phones again. The reason it was skipped — device
-            // tilt shifting every layer leftward until content clipped the
-            // viewport edge — was the translation term, and at <=768px the layers
-            // no longer consume --tx/--ty at all. Only rotation and Z respond, and
+            // Gyroscope is on for phones. The reason it was skipped — device tilt
+            // shifting every layer leftward until content clipped the viewport
+            // edge — was the translation term, and at <=768px the layers no
+            // longer consume --tx/--ty at all. Only rotation and Z respond, and
             // neither can move anything off screen.
+            //
+            // Where the API is gated (iOS 13+), the tilt is simply off. Asking for
+            // it meant DeviceOrientationEvent.requestPermission() throwing up a
+            // system "Allow Motion & Orientation Access?" dialog on first tap, and
+            // guests read a permission prompt on a wedding invitation as something
+            // being asked of them — several stopped and asked what it was for. The
+            // effect is a barely-perceptible parallax; it is not worth a dialog.
+            // Android and desktop, which don't gate it, still get it.
             if (typeof DeviceOrientationEvent !== 'undefined' &&
-                typeof DeviceOrientationEvent.requestPermission === 'function') {
-                // iOS 13+ requires user gesture to unlock — piggyback on first click
-                const unlock = () => {
-                    DeviceOrientationEvent.requestPermission()
-                        .then(r => { if (r === 'granted') attachOrient(); })
-                        .catch(() => {});
-                    document.removeEventListener('click', unlock);
-                };
-                document.addEventListener('click', unlock, { once: true });
-            } else if (typeof DeviceOrientationEvent !== 'undefined') {
+                typeof DeviceOrientationEvent.requestPermission !== 'function') {
                 attachOrient();
             }
         })();
