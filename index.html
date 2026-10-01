@@ -2896,17 +2896,27 @@
             color: #999;
         }
 
+        /* The pulse is scaleY, not height. Animating height here animated the
+           blessings section's layout height with it — about 15px of it — which
+           animated the whole document's height, and Chrome answers a document
+           that changes size above the viewport by nudging the scroll position to
+           keep the content still. The result was the page twitching 15px, twice
+           a second, for as long as it sat anywhere — easy to miss while a finger
+           is moving, plain to see the moment a guest stops to read something.
+           transform-origin: top so it still grows downward, the way a height
+           change did. */
         .scroll-indicator::after {
             content: '';
             width: 1px;
-            height: 30px;
+            height: 35px;
             background: #c9a030;
+            transform-origin: top center;
             animation: scrollPulse 2s ease-in-out infinite;
         }
 
         @keyframes scrollPulse {
-            0%, 100% { opacity: 0.3; height: 20px; }
-            50% { opacity: 1; height: 35px; }
+            0%, 100% { opacity: 0.3; transform: scaleY(0.57); }
+            50% { opacity: 1; transform: scaleY(1); }
         }
 
         /* Section 2: Family & Invite */
@@ -4987,6 +4997,15 @@
         .story-text.visible {
             opacity: 1;
             transform: translateY(0);
+        }
+
+        /* The emoji closing the story and the couple paragraphs. Upright rather
+           than italic — a slanted emoji just looks like a rendering fault — and
+           kept on one line so the set never breaks across the wrap. */
+        .text-emoji {
+            font-style: normal;
+            white-space: nowrap;
+            letter-spacing: 1px;
         }
 
         /* Section 6: Meet the Couple */
@@ -9225,7 +9244,8 @@
     </div>
 
     <!-- Section 3: Celebrations -->
-    <section class="section section-celebrations section-zenter scene-3d">
+    <section class="section section-celebrations section-zenter scene-3d"
+            >
         <h2 class="celebrations-heading animate"><span class="z-heading">Celebrations</span></h2>
         <p class="celebrations-sub animate">A tale of two days, and a lifetime</p>
 
@@ -9487,7 +9507,8 @@
     </div>
 
     <!-- Section: Travel & Stay -->
-    <section class="section section-travel depth-section section-zenter scene-3d">
+    <section class="section section-travel depth-section section-zenter scene-3d"
+            >
         <div class="vignette-pulse"></div>
         <div class="gold-particles">
             <div class="gold-particle"></div>
@@ -9564,7 +9585,7 @@
             <div class="origami-panel unfold-3">
                 <img src="images/our-story-web.jpg" alt="Our story" class="story-image animate" width="1100" height="1100" loading="lazy" decoding="async">
                 <p class="story-text animate">
-                    Two souls destined to be together, brought by fate and bound by love. And now, we come together to begin our forever.
+                    Two strangers, one little twist of fate, a few &ldquo;let&rsquo;s see where this goes&rdquo; conversations&hellip; and somehow, we ended up here &mdash; planning a whole wedding. Guess it went pretty well! <span class="text-emoji">&#129401;&#128514;&#10084;&#65039;</span>
                 </p>
             </div>
         </div>
@@ -9701,7 +9722,8 @@
         <h2 class="couple-heading animate glow-on-visible"><span class="z-heading">Meet the Couple</span></h2>
         <div class="divider"></div>
         <p class="couple-text animate">
-            We are both so delighted that you are able to join us in celebrating what we hope will be one of the happiest days of our lives.
+            So, who are these two?<br>
+            One talks a little too much, the other pretends to listen&hellip; and somehow, they both decided forever sounded like a great idea. <span class="text-emoji">&#128514;&#10084;&#65039;</span>
         </p>
         <!-- Photos stacked as mounted album prints; the front one flicks away.
              --off on each print is its distance from the current index and the
@@ -9710,35 +9732,41 @@
             <div class="album-stack" id="albumStack">
                 <figure class="album-photo">
                     <span class="album-mat">
-                        <img src="images/couple1-web.jpg" width="1100" height="1653" alt="Ruhi and Nishant, photo 1" draggable="false" loading="lazy" decoding="async">
+                        <img src="images/couple1-web.jpg" width="1100" height="1467" alt="Ruhi and Nishant, photo 1" draggable="false" loading="lazy" decoding="async">
                     </span>
                     <i class="album-corner tl"></i><i class="album-corner tr"></i>
                     <i class="album-corner bl"></i><i class="album-corner br"></i>
                 </figure>
                 <figure class="album-photo">
                     <span class="album-mat">
-                        <img src="images/couple2-web.jpg" width="1100" height="1653" alt="Ruhi and Nishant, photo 2" draggable="false" loading="lazy" decoding="async">
+                        <img src="images/couple2-web.jpg" width="1100" height="1467" alt="Ruhi and Nishant, photo 2" draggable="false" loading="lazy" decoding="async">
                     </span>
                     <i class="album-corner tl"></i><i class="album-corner tr"></i>
                     <i class="album-corner bl"></i><i class="album-corner br"></i>
                 </figure>
                 <figure class="album-photo">
                     <span class="album-mat">
-                        <img src="images/couple3-web.jpg" width="1100" height="1653" alt="Ruhi and Nishant, photo 3" draggable="false" loading="lazy" decoding="async">
+                        <!-- This one's source is landscape and the deck is 3:4, so no
+                             cover crop can hold both of them: the pair spans 2600 of the
+                             photo's 4160px width and a 3:4 window at its full height is
+                             only 2080 wide. The derivative is pre-composed instead — the
+                             pair cropped tight, then letterboxed on the mat colour — so
+                             object-fit: cover has nothing left to cut. -->
+                        <img src="images/couple3-web.jpg" width="1100" height="1467" alt="Ruhi and Nishant, photo 3" draggable="false" loading="lazy" decoding="async">
                     </span>
                     <i class="album-corner tl"></i><i class="album-corner tr"></i>
                     <i class="album-corner bl"></i><i class="album-corner br"></i>
                 </figure>
                 <figure class="album-photo">
                     <span class="album-mat">
-                        <img src="images/couple4-web.jpg" width="1100" height="1653" alt="Ruhi and Nishant, photo 4" draggable="false" loading="lazy" decoding="async">
+                        <img src="images/couple4-web.jpg" width="1100" height="1467" alt="Ruhi and Nishant, photo 4" draggable="false" loading="lazy" decoding="async">
                     </span>
                     <i class="album-corner tl"></i><i class="album-corner tr"></i>
                     <i class="album-corner bl"></i><i class="album-corner br"></i>
                 </figure>
                 <figure class="album-photo">
                     <span class="album-mat">
-                        <img src="images/couple5-web.jpg" width="1100" height="1653" alt="Ruhi and Nishant, photo 5" draggable="false" loading="lazy" decoding="async">
+                        <img src="images/couple5-web.jpg" width="1100" height="1467" alt="Ruhi and Nishant, photo 5" draggable="false" loading="lazy" decoding="async">
                     </span>
                     <i class="album-corner tl"></i><i class="album-corner tr"></i>
                     <i class="album-corner bl"></i><i class="album-corner br"></i>
